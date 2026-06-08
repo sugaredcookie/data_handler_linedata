@@ -6,21 +6,30 @@
 </head>
 <body>
 
-  <h1>Application Management Portal</h1>
+  <div class="header">
+    <h1>Application Management Portal</h1>
+    <p>
+      Manage application promotions across environments
+    </p>
+  </div>
 
-  <input
-    type="text"
-    id="search"
-    placeholder="Search application..."
-  >
+  <div class="controls">
 
-  <select id="environmentFilter">
-    <option value="ALL">All</option>
-    <option value="DEV">DEV</option>
-    <option value="QA">QA</option>
-    <option value="UAT">UAT</option>
-    <option value="PROD">PROD</option>
-  </select>
+    <input
+      type="text"
+      id="search"
+      placeholder="Search application..."
+    >
+
+    <select id="environmentFilter">
+      <option value="ALL">All Environments</option>
+      <option value="DEV">DEV</option>
+      <option value="QA">QA</option>
+      <option value="UAT">UAT</option>
+      <option value="PROD">PROD</option>
+    </select>
+
+  </div>
 
   <div id="applications"></div>
 

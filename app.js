@@ -10,11 +10,17 @@ fetch("./data/applications.json")
       applications
     );
 
-  }).catch(e => {
-    console.error("Failed to load json", e);
+  })
+  .catch(error => {
+
+    console.error(
+      "Failed to load JSON",
+      error
+    );
+
   });
 
-  function renderApplications(data) {
+function renderApplications(data) {
 
   const container =
     document.getElementById(
@@ -45,18 +51,128 @@ fetch("./data/applications.json")
           ${app.Status}
         </p>
 
-        <button>
-          View Details
-        </button>
+        <div class="actions">
 
-        <button>
-          Promote
-        </button>
+            <button
+                class="details-btn"
+            >
+                View Details
+            </button>
+
+            <button
+                class="promote-btn"
+                onclick="promote('${app.Application}')"
+            >
+                Promote
+            </button>
+
+        </div>
 
       </div>
     `;
 
   });
+
+}
+
+function viewDetails(applicationName) {
+
+  const app =
+    applications.find(
+      app =>
+        app.Application === applicationName
+    );
+
+  if (!app) return;
+
+  alert(
+`Application: ${app.Application}
+
+Version: ${app.Version}
+
+Environment: ${app.Environment}
+
+Owner: ${app.Owner}
+
+Release Date: ${app.ReleaseDate}
+
+Status: ${app.Status}`
+  );
+
+}
+
+function promote(applicationName) {
+
+  const app =
+    applications.find(
+      app =>
+        app.Application === applicationName
+    );
+
+  if (!app) return;
+
+  let targetEnvironment;
+
+  switch(app.Environment) {
+
+    case "DEV":
+      targetEnvironment = "QA";
+      break;
+
+    case "QA":
+      targetEnvironment = "UAT";
+      break;
+
+    case "UAT":
+      targetEnvironment = "PROD";
+      break;
+
+    case "PROD":
+      alert(
+        `${app.Application} is already in PROD`
+      );
+      return;
+
+    default:
+      alert(
+        "Unknown Environment"
+      );
+      return;
+
+  }
+
+  const title =
+    encodeURIComponent(
+      `[PROMOTION] ${app.Application}`
+    );
+
+  const body =
+    encodeURIComponent(
+`### Application Name
+
+${app.Application}
+
+### Current Environment
+
+${app.Environment}
+
+### Target Environment
+
+${targetEnvironment}
+
+### Version
+
+${app.Version}
+
+### Reason
+
+Promotion Request`
+    );
+
+  window.open(
+    `https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`,
+    "_blank"
+  );
 
 }
 
@@ -71,10 +187,11 @@ document
           .toLowerCase();
 
       const filtered =
-        applications.filter(app =>
-          app.Application
-            .toLowerCase()
-            .includes(term)
+        applications.filter(
+          app =>
+            app.Application
+              .toLowerCase()
+              .includes(term)
         );
 
       renderApplications(
@@ -103,8 +220,7 @@ document
         filtered =
           applications.filter(
             app =>
-              app.Environment
-                === env
+              app.Environment === env
           );
 
       }
@@ -115,4 +231,3 @@ document
 
     }
   );
-
