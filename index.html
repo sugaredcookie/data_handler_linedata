@@ -2,38 +2,61 @@
 <html>
 <head>
   <title>Application Management Portal</title>
-  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    tailwind.config = {
+      content: [],
+      theme: {
+        extend: {
+          colors: {
+            primary: '#DD0031',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
+  <div class="max-w-7xl mx-auto p-8">
+    <div class="text-center mb-10">
+      <h1 class="text-5xl font-bold text-primary mb-2">Application Management</h1>
+      <p class="text-slate-600 dark:text-slate-400 text-xl">Linedata Platform • Promotion Portal</p>
+    </div>
 
-  <div class="header">
-    <h1>Application Management Portal</h1>
-    <p>
-      Manage application promotions across environments
-    </p>
+    <div class="flex flex-wrap gap-4 justify-center mb-10">
+      <input id="search" type="text" 
+             class="px-5 py-3 w-80 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary text-lg"
+             placeholder="Search applications...">
+
+      <select id="environmentFilter" 
+              class="px-5 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary">
+        <option value="ALL">All Environments</option>
+        <option value="DEV">DEV</option>
+        <option value="QA">QA</option>
+        <option value="UAT">UAT</option>
+        <option value="PROD">PROD</option>
+      </select>
+
+      <select id="statusFilter" 
+              class="px-5 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary">
+        <option value="ALL">All Statuses</option>
+        <option value="Ready For Promotion">Ready For Promotion</option>
+        <option value="Testing">Testing</option>
+        <option value="Live">Live</option>
+        <option value="Development">Development</option>
+      </select>
+
+      <button onclick="clearFilters()" 
+              class="px-6 py-3 bg-slate-700 hover:bg-slate-800 text-white rounded-2xl font-medium">
+        Clear Filters
+      </button>
+    </div>
+
+    <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </div>
-
-  <div class="controls">
-
-    <input
-      type="text"
-      id="search"
-      placeholder="Search application..."
-    >
-
-    <select id="environmentFilter">
-      <option value="ALL">All Environments</option>
-      <option value="DEV">DEV</option>
-      <option value="QA">QA</option>
-      <option value="UAT">UAT</option>
-      <option value="PROD">PROD</option>
-    </select>
-
-  </div>
-
-  <div id="applications"></div>
 
   <script src="app.js" defer></script>
-
 </body>
 </html>
