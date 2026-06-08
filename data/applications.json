@@ -1,0 +1,98 @@
+[
+  {
+    "Application": "RECON",
+    "Version": "2.1.0",
+    "Environment": "UAT",
+    "Owner": "Payments Team",
+    "ReleaseDate": "2026-06-01",
+    "Status": "Ready For Promotion"
+  },
+  {
+    "Application": "TRADING",
+    "Version": "1.8.4",
+    "Environment": "QA",
+    "Owner": "Trading Team",
+    "ReleaseDate": "2026-05-28",
+    "Status": "Testing"
+  },
+  {
+    "Application": "REPORTING",
+    "Version": "3.0.1",
+    "Environment": "PROD",
+    "Owner": "Reporting Team",
+    "ReleaseDate": "2026-05-15",
+    "Status": "Live"
+  },
+  {
+    "Application": "SETTLEMENTS",
+    "Version": "2.5.3",
+    "Environment": "DEV",
+    "Owner": "Operations Team",
+    "ReleaseDate": "2026-06-06",
+    "Status": "Development"
+  },
+  {
+    "Application": "RISK-MANAGER",
+    "Version": "4.1.2",
+    "Environment": "UAT",
+    "Owner": "Risk Team",
+    "ReleaseDate": "2026-06-03",
+    "Status": "Ready For Promotion"
+  },
+  {
+    "Application": "MARKET-DATA",
+    "Version": "1.9.0",
+    "Environment": "QA",
+    "Owner": "Market Team",
+    "ReleaseDate": "2026-05-30",
+    "Status": "Testing"
+  },
+  {
+    "Application": "AUTH-SERVICE",
+    "Version": "5.0.0",
+    "Environment": "PROD",
+    "Owner": "Platform Team",
+    "ReleaseDate": "2026-05-10",
+    "Status": "Live"
+  },
+  {
+    "Application": "CLIENT-PORTAL",
+    "Version": "2.7.1",
+    "Environment": "UAT",
+    "Owner": "Frontend Team",
+    "ReleaseDate": "2026-06-04",
+    "Status": "Ready For Promotion"
+  },
+  {
+    "Application": "NOTIFICATION-SERVICE",
+    "Version": "1.4.8",
+    "Environment": "DEV",
+    "Owner": "Platform Team",
+    "ReleaseDate": "2026-06-07",
+    "Status": "Development"
+  },
+  {
+    "Application": "AUDIT-ENGINE",
+    "Version": "3.2.0",
+    "Environment": "QA",
+    "Owner": "Compliance Team",
+    "ReleaseDate": "2026-06-02",
+    "Status": "Testing"
+  },
+  {
+    "Application": "PAYMENT-GATEWAY",
+    "Version": "6.0.1",
+    "Environment": "PROD",
+    "Owner": "Payments Team",
+    "ReleaseDate": "2026-05-20",
+    "Status": "Live"
+  },
+  {
+    "Application": "DATA-WAREHOUSE",
+    "Version": "2.3.5",
+    "Environment": "UAT",
+    "Owner": "Data Team",
+    "ReleaseDate": "2026-06-01",
+    "Status": "Ready For Promotion"
+  }
+]
