@@ -1,6 +1,8 @@
 let applications = [];
 
-fetch("./data/applications.json")
+fetch(
+  "https://raw.githubusercontent.com/sugaredcookie/linedata-config-store/main/applications/applications.json"
+)
   .then(res => res.json())
   .then(data => {
     applications = data;
