@@ -128,7 +128,22 @@ function promote(applicationName) {
   }
 
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
-  const body = encodeURIComponent(`### Application\n${app.Application}\n\n### Current Environment\n${app.Environment}\n\n### Target\n${target}\n\n### Version\n${app.Version}`);
+  const body = encodeURIComponent(`
+    ### Application Name
+    ${app.Application}
+
+    ### Current Environment
+    ${app.Environment}
+
+    ### Target Environment
+    ${target}
+
+    ### Version
+    ${app.Version}
+
+    ### Change Reason
+    Promotion Request
+    `);
 
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
 }
