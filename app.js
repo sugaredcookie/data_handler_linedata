@@ -7,11 +7,14 @@ fetch(
   .then(data => {
     applications = data;
     renderApplications(applications);
+    renderApplications(applications);
   })
   .catch(error => {
     console.error("Failed to load applications.json", error);
     document.getElementById("applications").innerHTML = `
-      <p class="text-center text-red-500 col-span-full py-12 text-lg">Failed to load application data.</p>`;
+      <p class="col-span-full text-center py-20 text-red-500 text-lg">
+        Failed to load applications.json
+      </p>`;
   });
 
 function renderApplications(data) {
@@ -19,7 +22,7 @@ function renderApplications(data) {
   container.innerHTML = "";
 
   if (data.length === 0) {
-    container.innerHTML = `<p class="text-center text-slate-500 col-span-full py-12 text-lg">No applications found.</p>`;
+    container.innerHTML = `<p class="col-span-full text-center py-20 text-slate-500 text-lg">No applications match your filters.</p>`;
     return;
   }
 
@@ -28,11 +31,9 @@ function renderApplications(data) {
 
     container.innerHTML += `
       <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 group">
-        <div class="flex justify-between items-start mb-5">
-          <h3 class="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-            ${app.Application}
-          </h3>
-          <span class="px-4 py-1.5 text-xs font-semibold rounded-full 
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-2xl font-semibold text-slate-900 dark:text-white group-hover:text-primary">${app.Application}</h3>
+          <span class="px-4 py-1 text-xs font-semibold rounded-full 
             ${envClass === 'prod' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300' : 
               envClass === 'uat' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' : 
               envClass === 'qa' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300' : 
@@ -54,7 +55,7 @@ function renderApplications(data) {
             View Details
           </button>
           <button onclick="promote('${app.Application}')" 
-                  class="flex-1 py-3.5 text-sm font-semibold bg-primary hover:bg-red-700 text-white rounded-2xl transition-all active:scale-95">
+                  class="flex-1 py-3.5 text-sm font-semibold bg-primary hover:bg-red-700 text-white rounded-2xl transition">
             Promote
           </button>
         </div>
@@ -63,10 +64,50 @@ function renderApplications(data) {
   });
 }
 
-function viewDetails(applicationName) {
-  const app = applications.find(a => a.Application === applicationName);
+// Beautiful Modal
+function viewDetails(name) {
+  const app = applications.find(a => a.Application === name);
   if (!app) return;
-  alert(`Application: ${app.Application}\n\nVersion: ${app.Version}\nEnvironment: ${app.Environment}\nOwner: ${app.Owner}\nRelease Date: ${app.ReleaseDate}\nStatus: ${app.Status}`);
+
+  const modal = document.getElementById('detailsModal');
+  const content = document.getElementById('modalContent');
+  const title = document.getElementById('modalAppName');
+
+  title.textContent = app.Application;
+
+  content.innerHTML = `
+    <div class="grid grid-cols-2 gap-6 text-sm">
+      <div>
+        <p class="text-slate-500 dark:text-slate-400">Version</p>
+        <p class="font-mono text-xl font-semibold text-slate-900 dark:text-white">${app.Version}</p>
+      </div>
+      <div>
+        <p class="text-slate-500 dark:text-slate-400">Environment</p>
+        <p class="font-semibold">${app.Environment}</p>
+      </div>
+      <div>
+        <p class="text-slate-500 dark:text-slate-400">Owner</p>
+        <p class="font-semibold">${app.Owner}</p>
+      </div>
+      <div>
+        <p class="text-slate-500 dark:text-slate-400">Release Date</p>
+        <p class="font-semibold">${app.ReleaseDate}</p>
+      </div>
+    </div>
+    <div class="mt-6 pt-6 border-t dark:border-slate-700">
+      <p class="text-slate-500 dark:text-slate-400 mb-2">Status</p>
+      <p class="text-lg font-medium">${app.Status}</p>
+    </div>
+  `;
+
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeModal() {
+  const modal = document.getElementById('detailsModal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
 }
 
 function promote(applicationName) {
@@ -87,32 +128,32 @@ function promote(applicationName) {
   }
 
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
-  const body = encodeURIComponent(`### Application\n${app.Application}\n\n### Current\n${app.Environment}\n\n### Target\n${target}\n\n### Version\n${app.Version}`);
+  const body = encodeURIComponent(`### Application\n${app.Application}\n\n### Current Environment\n${app.Environment}\n\n### Target\n${target}\n\n### Version\n${app.Version}`);
 
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
 }
 
-// Sorting + Filtering
+// Filters (including Version)
 function filterApplications() {
   const term = document.getElementById("search").value.toLowerCase().trim();
   const env = document.getElementById("environmentFilter").value;
   const status = document.getElementById("statusFilter").value;
-  const sortMode = document.getElementById("sortSelect").value;
+  const versionTerm = document.getElementById("versionFilter").value.toLowerCase().trim();
 
   let filtered = applications;
 
-  if (term) filtered = filtered.filter(app => app.Application.toLowerCase().includes(term));
-  if (env !== "ALL") filtered = filtered.filter(app => app.Environment === env);
-  if (status !== "ALL") filtered = filtered.filter(app => app.Status === status);
-
-  // Sorting
-  filtered.sort((a, b) => {
-    if (sortMode === "name-asc") return a.Application.localeCompare(b.Application);
-    if (sortMode === "name-desc") return b.Application.localeCompare(a.Application);
-    if (sortMode === "version-desc") return b.Version.localeCompare(a.Version);
-    if (sortMode === "date-desc") return new Date(b.ReleaseDate) - new Date(a.ReleaseDate);
-    return 0;
-  });
+  if (term) {
+    filtered = filtered.filter(app => app.Application.toLowerCase().includes(term));
+  }
+  if (env !== "ALL") {
+    filtered = filtered.filter(app => app.Environment === env);
+  }
+  if (status !== "ALL") {
+    filtered = filtered.filter(app => app.Status === status);
+  }
+  if (versionTerm) {
+    filtered = filtered.filter(app => app.Version.toLowerCase().includes(versionTerm));
+  }
 
   renderApplications(filtered);
 }
@@ -147,7 +188,7 @@ function clearFilters() {
   document.getElementById("search").value = "";
   document.getElementById("environmentFilter").value = "ALL";
   document.getElementById("statusFilter").value = "ALL";
-  document.getElementById("sortSelect").value = "name-asc";
+  document.getElementById("versionFilter").value = "";
   renderApplications(applications);
 }
 
@@ -155,7 +196,7 @@ function clearFilters() {
 document.getElementById("search").addEventListener("input", filterApplications);
 document.getElementById("environmentFilter").addEventListener("change", filterApplications);
 document.getElementById("statusFilter").addEventListener("change", filterApplications);
-document.getElementById("sortSelect").addEventListener("change", filterApplications);
+document.getElementById("versionFilter").addEventListener("input", filterApplications);
 
 window.onload = () => {
   const savedDark = localStorage.getItem('darkMode') === 'true';
