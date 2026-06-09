@@ -1,23 +1,26 @@
 let applications = [];
+let lastUpdated = new Date();
 
-fetch(
-  "https://api.github.com/repos/sugaredcookie/linedata-config-store/contents/applications/applications.json"
-)
+fetch("https://raw.githubusercontent.com/sugaredcookie/linedata-config-store/main/applications/applications.json")
   .then(res => res.json())
   .then(data => {
-
-    const decoded =
-      JSON.parse(
-        atob(
-          data.content.replace(/\n/g, "")
-        )
-      );
-
-    applications = decoded;
-
+    applications = data;
+    lastUpdated = new Date();
     renderApplications(applications);
-
+    updateLastUpdated();
   })
+  .catch(error => {
+    console.error("Failed to load data", error);
+    document.getElementById("applications").innerHTML = `
+      <p class="col-span-full text-center py-20 text-red-500 text-lg">
+        Failed to load applications data. Please check the JSON file.
+      </p>`;
+  });
+
+function updateLastUpdated() {
+  const el = document.getElementById('lastUpdated');
+  if (el) el.textContent = `Last updated: ${lastUpdated.toLocaleString()}`;
+}
 
 function renderApplications(data) {
   const container = document.getElementById("applications");
@@ -44,16 +47,16 @@ function renderApplications(data) {
           </span>
         </div>
 
-        <div class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-          <p><span class="font-medium text-slate-500">Version:</span> <span class="font-mono">${app.Version}</span></p>
-          <p><span class="font-medium text-slate-500">Owner:</span> ${app.Owner}</p>
-          <p><span class="font-medium text-slate-500">Release Date:</span> ${app.ReleaseDate}</p>
-          <p><span class="font-medium text-slate-500">Status:</span> ${app.Status}</p>
+        <div class="space-y-2.5 text-sm text-slate-600 dark:text-slate-400">
+          <p><span class="font-medium">Version:</span> <span class="font-mono">${app.Version}</span></p>
+          <p><span class="font-medium">Owner:</span> ${app.Owner}</p>
+          <p><span class="font-medium">Release:</span> ${app.ReleaseDate}</p>
+          <p><span class="font-medium">Status:</span> ${app.Status}</p>
         </div>
 
         <div class="mt-8 flex gap-3">
           <button onclick="viewDetails('${app.Application}')" 
-                  class="flex-1 py-3.5 text-sm font-medium border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-colors">
+                  class="flex-1 py-3.5 text-sm font-medium border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition">
             View Details
           </button>
           <button onclick="promote('${app.Application}')" 
@@ -131,26 +134,25 @@ function promote(applicationName) {
 
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
   const body = encodeURIComponent(`
-    ### Application Name
-    ${app.Application}
+### Application
+${app.Application}
 
-    ### Current Environment
-    ${app.Environment}
+### Current Environment
+${app.Environment}
 
-    ### Target Environment
-    ${target}
+### Target Environment
+${target}
 
-    ### Version
-    ${app.Version}
+### Version
+${app.Version}
 
-    ### Change Reason
-    Promotion Request
-    `);
+### Reason
+Promotion request from dashboard`);
 
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
 }
 
-// Filters (including Version)
+// Filters
 function filterApplications() {
   const term = document.getElementById("search").value.toLowerCase().trim();
   const env = document.getElementById("environmentFilter").value;
@@ -159,65 +161,14 @@ function filterApplications() {
 
   let filtered = applications;
 
-  if (term) {
-    filtered = filtered.filter(app => app.Application.toLowerCase().includes(term));
-  }
-  if (env !== "ALL") {
-    filtered = filtered.filter(app => app.Environment === env);
-  }
-  if (status !== "ALL") {
-    filtered = filtered.filter(app => app.Status === status);
-  }
-  if (versionTerm) {
-    filtered = filtered.filter(app => app.Version.toLowerCase().includes(versionTerm));
-  }
+  if (term) filtered = filtered.filter(app => app.Application.toLowerCase().includes(term));
+  if (env !== "ALL") filtered = filtered.filter(app => app.Environment === env);
+  if (status !== "ALL") filtered = filtered.filter(app => app.Status === status);
+  if (versionTerm) filtered = filtered.filter(app => app.Version.toLowerCase().includes(versionTerm));
 
   renderApplications(filtered);
 }
 
-// Export to CSV
-function exportToCSV() {
-  const csvContent = Papa.unparse(applications); // Requires PapaParse if not included
-  const blob = new Blob([csvContent], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'applications_export.csv';
-  a.click();
-}
-
-// Dark Mode
-function toggleDarkMode() {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-  updateThemeIcon();
-}
-
-function updateThemeIcon() {
-
-  const icon =
-    document.getElementById("themeIcon");
-
-  if (!icon) {
-    return;
-  }
-
-  const isDark =
-    document.documentElement.classList.contains("dark");
-
-  icon.classList.toggle(
-    "fa-moon",
-    !isDark
-  );
-
-  icon.classList.toggle(
-    "fa-sun",
-    isDark
-  );
-
-}
-
-// Clear Filters
 function clearFilters() {
   document.getElementById("search").value = "";
   document.getElementById("environmentFilter").value = "ALL";
@@ -226,7 +177,34 @@ function clearFilters() {
   renderApplications(applications);
 }
 
-// Initialize listeners
+// Export CSV
+function exportToCSV() {
+  if (applications.length === 0) {
+    alert("No data to export");
+    return;
+  }
+  let csv = "Application,Version,Environment,Owner,ReleaseDate,Status\n";
+  applications.forEach(app => {
+    csv += `"${app.Application}","${app.Version}","${app.Environment}","${app.Owner}","${app.ReleaseDate}","${app.Status}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `applications_export_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+function updateThemeIcon() {
+  const icon = document.getElementById('themeIcon');
+  if (!icon) return;
+  const isDark = document.documentElement.classList.contains('dark');
+  icon.classList.toggle('fa-moon', !isDark);
+  icon.classList.toggle('fa-sun', isDark);
+}
+
+// Initialize
 document.getElementById("search").addEventListener("input", filterApplications);
 document.getElementById("environmentFilter").addEventListener("change", filterApplications);
 document.getElementById("statusFilter").addEventListener("change", filterApplications);
