@@ -20,66 +20,62 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
   <div class="max-w-7xl mx-auto p-8">
-    <div class="text-center mb-10">
-      <h1 class="text-5xl font-bold text-primary mb-2 tracking-tight">Application Management</h1>
-      <p class="text-slate-600 dark:text-slate-400 text-xl">Linedata Platform • Promotion Portal</p>
+    <!-- Centered Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold tracking-tighter text-primary">Application Management</h1>
+      <p class="text-slate-600 dark:text-slate-400 text-xl mt-2">Linedata Platform • Promotion Portal</p>
     </div>
 
-    <!-- Controls -->
-    <div class="flex flex-wrap gap-4 justify-center mb-12">
-      <input id="search" type="text"
-             class="px-5 py-3 w-80 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary text-lg placeholder-slate-400"
-             placeholder="Search applications...">
+    <!-- Glassmorphic Controls -->
+    <div class="glass border border-slate-200 dark:border-slate-700 rounded-3xl p-8 mb-12 shadow-xl">
+      <div class="flex flex-wrap gap-4 justify-center">
+        <input id="search" type="text"
+               class="px-6 py-4 w-96 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-3xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 text-lg placeholder-slate-400 transition-all"
+               placeholder="🔍 Search applications...">
 
-      <select id="environmentFilter"
-              class="px-5 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary">
-        <option value="ALL">All Environments</option>
-        <option value="DEV">DEV</option>
-        <option value="QA">QA</option>
-        <option value="UAT">UAT</option>
-        <option value="PROD">PROD</option>
-      </select>
+        <select id="environmentFilter" 
+                class="px-6 py-4 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-3xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20">
+          <option value="ALL">🌐 All Environments</option>
+          <option value="DEV">🛠 DEV</option>
+          <option value="QA">🔍 QA</option>
+          <option value="UAT">🧪 UAT</option>
+          <option value="PROD">🚀 PROD</option>
+        </select>
 
-      <select id="statusFilter"
-              class="px-5 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary">
-        <option value="ALL">All Statuses</option>
-        <option value="Ready For Promotion">Ready For Promotion</option>
-        <option value="Testing">Testing</option>
-        <option value="Live">Live</option>
-        <option value="Development">Development</option>
-      </select>
+        <select id="statusFilter" 
+                class="px-6 py-4 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-3xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20">
+          <option value="ALL">All Statuses</option>
+          <option value="Ready For Promotion">✅ Ready For Promotion</option>
+          <option value="Testing">🧪 Testing</option>
+          <option value="Live">🚀 Live</option>
+          <option value="Development">🔨 Development</option>
+        </select>
 
-      <input id="versionFilter" type="text"
-             class="px-5 py-3 w-48 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:border-primary text-lg"
-             placeholder="Version (e.g. 2.1)">
+        <input id="versionFilter" type="text" placeholder="Version (e.g. 2.1)"
+               class="px-6 py-4 w-52 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-3xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20">
 
       <button onclick="clearFilters()" 
               class="px-6 py-3 bg-slate-700 hover:bg-slate-800 text-white rounded-2xl font-medium flex items-center gap-2">
         <i class="fas fa-times"></i> Clear
       </button>
+        <button onclick="exportToCSV()" 
+                class="px-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-medium flex items-center gap-2 transition-all active:scale-95">
+          <i class="fas fa-download"></i> Export
+        </button>
+
+        <button onclick="clearFilters()" 
+                class="px-6 py-4 bg-slate-700 hover:bg-slate-800 text-white rounded-3xl font-medium transition-all active:scale-95">
+          Clear
+        </button>
+      </div>
     </div>
 
     <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </div>
 
-  <!-- Beautiful View Details Modal -->
+  <!-- Beautiful Modal -->
   <div id="detailsModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full mx-4 shadow-2xl overflow-hidden">
-      <div class="px-8 pt-8 pb-6 border-b dark:border-slate-700">
-        <h2 id="modalAppName" class="text-3xl font-bold text-primary"></h2>
-      </div>
-      
-      <div id="modalContent" class="p-8 space-y-6 text-slate-600 dark:text-slate-300">
-        <!-- Populated by JS -->
-      </div>
-
-      <div class="flex border-t dark:border-slate-700">
-        <button onclick="closeModal()" 
-                class="flex-1 py-5 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-          Close
-        </button>
-      </div>
-    </div>
+    <!-- Populated by JS -->
   </div>
 
   <script src="app.js" defer></script>
