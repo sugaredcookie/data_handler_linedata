@@ -151,7 +151,7 @@ function promote(applicationName) {
 
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
   const body = encodeURIComponent(`
-### Application
+### Application Name
 ${app.Application}
 
 ### Current Environment
@@ -163,7 +163,7 @@ ${target}
 ### Version
 ${app.Version}
 
-### Reason
+### Change Reason
 Promotion request from dashboard`);
 
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
@@ -247,4 +247,5 @@ window.onload = () => {
   const savedDark = localStorage.getItem('darkMode') === 'true';
   if (savedDark) document.documentElement.classList.add('dark');
   updateThemeIcon();
+  
 };
