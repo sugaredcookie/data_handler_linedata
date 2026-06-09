@@ -1,21 +1,23 @@
 let applications = [];
 
 fetch(
-  "https://raw.githubusercontent.com/sugaredcookie/linedata-config-store/main/applications/applications.json"
+  "https://api.github.com/repos/sugaredcookie/linedata-config-store/contents/applications/applications.json"
 )
   .then(res => res.json())
   .then(data => {
-    applications = data;
+
+    const decoded =
+      JSON.parse(
+        atob(
+          data.content.replace(/\n/g, "")
+        )
+      );
+
+    applications = decoded;
+
     renderApplications(applications);
-    renderApplications(applications);
+
   })
-  .catch(error => {
-    console.error("Failed to load applications.json", error);
-    document.getElementById("applications").innerHTML = `
-      <p class="col-span-full text-center py-20 text-red-500 text-lg">
-        Failed to load applications.json
-      </p>`;
-  });
 
 function renderApplications(data) {
   const container = document.getElementById("applications");
@@ -192,10 +194,27 @@ function toggleDarkMode() {
 }
 
 function updateThemeIcon() {
-  const isDark = document.documentElement.classList.contains('dark');
-  const icon = document.getElementById('themeIcon');
-  icon.classList.toggle('fa-moon', !isDark);
-  icon.classList.toggle('fa-sun', isDark);
+
+  const icon =
+    document.getElementById("themeIcon");
+
+  if (!icon) {
+    return;
+  }
+
+  const isDark =
+    document.documentElement.classList.contains("dark");
+
+  icon.classList.toggle(
+    "fa-moon",
+    !isDark
+  );
+
+  icon.classList.toggle(
+    "fa-sun",
+    isDark
+  );
+
 }
 
 // Clear Filters
