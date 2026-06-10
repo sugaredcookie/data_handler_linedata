@@ -2,144 +2,168 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Application Management Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Linedata Release Manager | Client-Centric Dashboard</title>
+  <!-- Tailwind CSS + Font Awesome + Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             primary: '#DD0031',
+            secondary: '#0A2540',
+            'enterprise-gray': '#F8FAFC',
+          },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 8px 30px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02)',
+            'card-hover': '0 20px 35px -12px rgba(0,0,0,0.12), 0 0 0 1px rgba(221,0,49,0.05)',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out',
+            'slide-in-left': 'slideInLeft 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1)',
+          },
+          keyframes: {
+            fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
+            slideInLeft: { from: { transform: 'translateX(-20px)', opacity: '0' }, to: { transform: 'translateX(0)', opacity: '1' } },
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen antialiased">
-  <div class="max-w-7xl mx-auto p-6 md:p-8">
-    
-    <div class="flex flex-col items-center justify-center text-center mb-10 border-b border-slate-200/60 dark:border-slate-800/60 pb-6">
-      <h1 class="text-4xl font-extrabold text-primary mb-2 tracking-tight md:text-5xl">Application Management</h1>
-      <p class="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium flex items-center justify-center gap-2">
-        <i class="fa-solid fa-layer-group text-slate-400 text-sm"></i> Linedata Platform <span class="text-slate-300 dark:text-slate-700">•</span> Promotion Portal
-      </p>
-    </div>
+<body class="bg-slate-50 dark:bg-slate-950 font-sans antialiased">
 
-    <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 mb-8 shadow-md space-y-4">
-      
-      <div class="flex flex-wrap gap-4 items-center justify-between">
-        
-        <div class="relative flex-1 min-w-[280px]">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </span>
-          <input id="search" type="text"
-                 class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-sm placeholder-slate-400 transition-all shadow-sm"
-                 placeholder="Filter by application identifier...">
-        </div>
-
-        <div class="relative min-w-[180px] w-full sm:w-auto">
-          <select id="environmentFilter"
-                  class="w-full appearance-none pl-4 pr-10 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-sm shadow-sm font-medium text-slate-700 dark:text-slate-200">
-            <option value="ALL">All Environments</option>
-            <option value="DEV">DEV Environment</option>
-            <option value="QA">QA Staging</option>
-            <option value="UAT">UAT Sandbox</option>
-            <option value="PROD">PROD Production</option>
-          </select>
-          <span class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
-            <i class="fa-solid fa-chevron-down"></i>
-          </span>
-        </div>
-
-        <div class="relative min-w-[200px] w-full sm:w-auto">
-          <select id="statusFilter"
-                  class="w-full appearance-none pl-4 pr-10 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-sm shadow-sm font-medium text-slate-700 dark:text-slate-200">
-            <option value="ALL">All Operational Statuses</option>
-            <option value="Ready For Promotion">Ready For Promotion</option>
-            <option value="Testing">Under testing</option>
-            <option value="Live">Live / Operational</option>
-            <option value="Development">Active Development</option>
-          </select>
-          <span class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
-            <i class="fa-solid fa-chevron-down"></i>
-          </span>
-        </div>
-
-        <div class="relative min-w-[150px] w-full sm:w-auto">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
-            <i class="fa-solid fa-code-branch"></i>
-          </span>
-          <input id="versionFilter" type="text" placeholder="Build Version (e.g. 2.1)"
-                 class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 text-sm shadow-sm placeholder-slate-400 font-medium">
-        </div>
-      </div>
-
-      <div class="border-t border-slate-200/60 dark:border-slate-800/60 my-2"></div>
-
-      <div class="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
-        
-        <div id="lastUpdated" class="text-xs font-semibold tracking-wide text-slate-500 dark:text-slate-400 flex items-center gap-2 uppercase">
-          <i class="fa-solid fa-circle-notch fa-spin text-primary"></i> Syncing Node telemetry...
-        </div>
-        
-        <div class="flex items-center gap-3 justify-end w-full sm:w-auto">
-          <button onclick="clearFilters()" 
-                  class="w-full sm:w-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg font-semibold transition-all active:scale-[0.98] text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-            <i class="fa-solid fa-arrow-rotate-left"></i> Reset Filters
-          </button>
-          
-          <button onclick="exportToCSV()" 
-                  class="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition-all active:scale-[0.98] text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-file-export"></i> Export CSV
-          </button>
-        </div>
+  <!-- ==================== MOBILE HEADER (with menu toggle) ==================== -->
+  <div class="mobile-header-bar sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-5 py-3 flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-3">
+      <button id="mobileMenuBtn" class="text-primary text-xl p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div>
+        <h2 class="font-bold text-slate-800 dark:text-white text-base">Clients</h2>
+        <p id="mobileSelectedClient" class="text-xs text-primary font-medium">—</p>
       </div>
     </div>
-
-    <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </div>
-
-  <div id="detailsModal" class="hidden fixed inset-0 bg-slate-950/60 flex items-center justify-center z-50 backdrop-blur-md transition-opacity duration-300">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full mx-4 shadow-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800/80 transform scale-95 transition-transform duration-300">
-      
-      <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
-        <div class="flex items-center gap-3">
-          <i class="fa-solid fa-circle-info text-primary text-xl"></i>
-          <h2 id="modalAppName" class="text-xl font-bold tracking-tight text-slate-900 dark:text-white"></h2>
-        </div>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <div id="modalContent" class="p-6 space-y-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></div>
-      
-      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-        <button onclick="closeModal()" 
-                class="px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
-          Dismiss View
-        </button>
-      </div>
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-chart-line text-slate-400 text-sm"></i>
+      <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Release Hub</span>
     </div>
   </div>
 
-  <script src="app.js" defer></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const timeBox = document.getElementById('lastUpdated');
-      if(timeBox) {
-        const now = new Date();
-        timeBox.innerHTML = `
-          <i class="fa-solid fa-circle-check text-emerald-500"></i> 
-          <span>System Telemetry Sync: ${now.toLocaleDateString()} ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-        `;
-      }
-    });
-  </script>
+  <!-- ==================== MOBILE DRAWER (overlay + sidebar) ==================== -->
+  <div id="mobileDrawerOverlay" class="mobile-drawer-overlay fixed inset-0 bg-black/40 z-40 backdrop-blur-sm hidden transition-all"></div>
+  <div id="mobileDrawer" class="mobile-drawer fixed top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 z-50 shadow-2xl border-r border-slate-200 dark:border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-building-columns text-primary text-lg"></i>
+        <span class="font-bold text-slate-800 dark:text-white">Client Portfolio</span>
+      </div>
+      <button id="closeDrawerBtn" class="text-slate-500 hover:text-slate-800 dark:hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="mobileClientList" class="flex-1 overflow-y-auto p-3 space-y-1 sidebar-scroll"></div>
+  </div>
+
+  <!-- ==================== MAIN LAYOUT: DESKTOP SIDEBAR + CONTENT ==================== -->
+  <div class="flex min-h-screen">
+    <!-- DESKTOP SIDEBAR (fixed left) -->
+    <aside class="desktop-sidebar w-72 bg-white dark:bg-slate-900/90 border-r border-slate-200 dark:border-slate-800 shadow-sm fixed left-0 top-0 h-full z-20 flex flex-col backdrop-blur-sm">
+      <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="h-9 w-9 bg-primary/10 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-briefcase text-primary text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-extrabold tracking-tight text-slate-800 dark:text-white">Clients</h1>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto py-4 px-3 sidebar-scroll" id="desktopClientList">
+        <!-- dynamic client nav will populate here -->
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 flex items-center gap-2">
+        <i class="fa-regular fa-building"></i> <span id="totalClientsBadge">0 clients</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA (pushes right on desktop) -->
+    <main class="flex-1 lg:ml-72 transition-all duration-300">
+      <div class="max-w-7xl mx-auto p-5 md:p-8">
+        <!-- header branding -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-7 border-b border-slate-200/70 dark:border-slate-800/70 pb-5">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-primary tracking-tight">Application Manager</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-2"><i class="fa-regular fa-circle-check text-emerald-500"></i> Client‑centric view · Real‑time promotion</p>
+          </div>
+          <div class="mt-3 md:mt-0 text-right">
+            <div class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full inline-flex items-center gap-2">
+              <i class="fa-solid fa-database text-primary/70 text-[10px]"></i>
+              <span id="lastUpdated" class="text-slate-600 dark:text-slate-300 font-medium">Syncing...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER BAR -->
+        <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-800 p-5 mb-7 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input id="search" type="text" placeholder="Search application..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary text-sm">
+            </div>
+            <select id="environmentFilter" class="w-full py-2.5 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
+              <option value="ALL">All Environments</option>
+              <option value="DEV">DEV</option>
+              <option value="QA">QA</option>
+              <option value="UAT">UAT</option>
+              <option value="PROD">PROD</option>
+            </select>
+            <select id="statusFilter" class="w-full py-2.5 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
+              <option value="ALL">All Status</option>
+              <option value="Ready For Promotion">Ready For Promotion</option>
+              <option value="Testing">Testing</option>
+              <option value="Live">Live</option>
+              <option value="Development">Development</option>
+            </select>
+            <div class="relative">
+              <i class="fa-solid fa-code-branch absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input id="versionFilter" type="text" placeholder="Version (eg. 2.1.0)" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
+            </div>
+          </div>
+          <div class="flex justify-end gap-3 mt-5 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="window.clearFilters()" class="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm font-medium transition flex items-center gap-2"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button onclick="window.exportToCSV()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition flex items-center gap-2 shadow-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          </div>
+        </div>
+
+        <!-- APPLICATIONS GRID (dynamic) -->
+        <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10 animate-fade-in"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DETAILS MODAL -->
+  <div id="detailsModal" class="hidden fixed inset-0 bg-slate-950/70 flex items-center justify-center z-50 backdrop-blur-sm transition-all">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full mx-4 shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-info text-primary text-xl"></i><h2 id="modalAppName" class="text-xl font-bold text-slate-900 dark:text-white"></h2></div>
+        <button onclick="window.closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-2xl"></i></button>
+      </div>
+      <div id="modalContent" class="p-6 space-y-3 text-sm text-slate-600 dark:text-slate-300"></div>
+      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+        <button onclick="window.closeModal()" class="px-5 py-2 bg-white dark:bg-slate-800 border rounded-xl text-sm font-medium">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

@@ -3,438 +3,198 @@
    ========================================================================== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-:root {
-  --primary-color: #DD0031;
-  --primary-hover: #b91c1c;
-  --primary-glow: rgba(221, 0, 49, 0.12);
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(226, 232, 240, 0.8);
-  --card-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
-  --card-shadow-hover: 0 30px 60px -15px rgba(15, 23, 42, 0.12), 0 0 40px -5px rgba(221, 0, 49, 0.03);
-  --elastic-transition: all 0.55s cubic-bezier(0.25, 1.25, 0.5, 1);
-  --smooth-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Elegant system theme setup */
 body {
   margin: 0;
-  padding: 60px 24px;
-  background: radial-gradient(circle at top right, #ffffff 0%, #f8fafc 40%, #f1f5f9 100%);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at top right, #f8fafc 0%, #f1f5f9 100%);
   color: #0f172a;
-  min-height: 100vh;
   transition: background 0.5s ease, color 0.3s ease;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Dark mode overrides seamlessly binding with Tailwind classes */
 body.dark {
   background: radial-gradient(circle at top right, #0f172a 0%, #090d16 60%, #020617 100%);
   color: #f8fafc;
-  --glass-bg: rgba(15, 23, 42, 0.45);
-  --glass-border: rgba(51, 65, 85, 0.5);
-  --card-shadow-hover: 0 30px 60px -15px rgba(0, 0, 0, 0.5), 0 0 40px -5px rgba(221, 0, 49, 0.06);
+}
+
+/* ==========================================================================
+   Custom scrollbar for sidebar
+   ========================================================================== */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.dark .sidebar-scroll::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark .sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* ==========================================================================
+   Mobile drawer specific styles
+   ========================================================================== */
+.mobile-drawer {
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-header-bar {
+  display: none;
+}
+
+.mobile-drawer-overlay {
+  transition: opacity 0.2s ease;
+}
+
+/* Desktop sidebar visible */
+@media (min-width: 769px) {
+  .desktop-sidebar {
+    display: flex;
+  }
+  .mobile-header-bar {
+    display: none;
+  }
+  .mobile-drawer-overlay {
+    display: none !important;
+  }
+  .mobile-drawer {
+    display: none !important;
+  }
+}
+
+/* Mobile specific overrides */
+@media (max-width: 768px) {
+  .desktop-sidebar {
+    display: none !important;
+  }
+  .mobile-header-bar {
+    display: flex;
+  }
+  .mobile-drawer-overlay {
+    display: block;
+  }
+  .mobile-drawer {
+    display: flex;
+  }
+}
+
+/* ==========================================================================
+   Client active highlight
+   ========================================================================== */
+.client-active {
+  background: linear-gradient(95deg, rgba(221, 0, 49, 0.08) 0%, rgba(221, 0, 49, 0.02) 100%);
+  border-left: 3px solid #DD0031;
+  color: #DD0031;
+  font-weight: 600;
+}
+
+.dark .client-active {
+  background: linear-gradient(95deg, rgba(221, 0, 49, 0.2) 0%, rgba(221, 0, 49, 0.05) 100%);
+  border-left-color: #DD0031;
+  color: #FF8A9F;
 }
 
 /* ==========================================================================
    Animations
    ========================================================================== */
-@keyframes fadeInDown {
-  from { 
-    opacity: 0; 
-    transform: translateY(-30px); 
-    filter: blur(8px);
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-    filter: blur(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(24px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-@keyframes cardPop {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.97);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-@keyframes titleLineGrow {
-  from { width: 0%; opacity: 0; }
-  to { width: 120px; opacity: 1; }
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* ==========================================================================
-   Header Layout
-   ========================================================================== */
-.header {
-  text-align: center;
-  margin-bottom: 64px;
-  animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.header h1 {
-  margin: 0;
-  color: var(--primary-color);
-  font-size: 52px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  position: relative;
-  display: inline-block;
-}
-
-.header h1::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary-color) 30%, var(--primary-color) 70%, transparent);
-  border-radius: 99px;
-  animation: titleLineGrow 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.header p {
-  color: #64748b;
-  margin-top: 24px;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 /* ==========================================================================
-   Controls & Dashboard Panel
+   Card hover enhancements
    ========================================================================== */
-.controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 56px;
-  padding: 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  box-shadow: 0 20px 40px -20px rgba(15, 23, 42, 0.05);
-  flex-wrap: wrap;
-  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+.shadow-card {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-/* Custom UI Form Control Polish */
-input, select {
-  padding: 13px 20px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #334155;
-  background: #ffffff;
-  transition: var(--smooth-transition);
-  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.01);
-}
-
-body.dark input, body.dark select {
-  background: #1e293b;
-  border-color: #334155;
-  color: #cbd5e1;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px var(--primary-glow);
-  transform: translateY(-1px);
-}
-
-input::placeholder {
-  color: #94a3b8;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-input:focus::placeholder {
-  transform: translateX(6px);
-  opacity: 0.5;
+.shadow-card-hover {
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(221, 0, 49, 0.05);
 }
 
 /* ==========================================================================
-   Grid & Dynamic Application Cards
+   Smooth transitions for interactive elements
    ========================================================================== */
-#applications {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 32px;
-  perspective: 1200px; /* Enhanced 3D layout environment */
+button, 
+select, 
+input,
+a {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 32px;
-  box-shadow: var(--card-shadow);
-  transition: var(--elastic-transition), border-color 0.3s;
-  border: 1px solid #e2e8f0;
-  border-top: 5px solid var(--primary-color);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  animation: cardPop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--delay, 1) * 0.06s);
+/* Focus rings for accessibility */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #DD0031;
+  outline-offset: 2px;
 }
-
-body.dark .card {
-  background: #111827;
-  border-color: #1f2937;
-}
-
-/* High-end hardware accelerated 3D float effect on hover */
-.card:hover {
-  transform: translateY(-12px) scale(1.025) rotateX(1deg);
-  box-shadow: var(--card-shadow-hover);
-  border-color: rgba(221, 0, 49, 0.15);
-}
-
-/* Modern Card Linear Ambient Background Hint */
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(221, 0, 49, 0.015) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
-.card h3 {
-  margin: 0 0 14px 0;
-  color: #0f172a;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  transition: color 0.25s ease;
-}
-
-body.dark .card h3 {
-  color: #f8fafc;
-}
-
-.card:hover h3 {
-  color: var(--primary-color);
-}
-
-.card p {
-  margin: 8px 0;
-  color: #475569;
-  line-height: 1.6;
-  font-size: 14px;
-}
-
-body.dark .card p {
-  color: #94a3b8;
-}
-
-/* Premium Tech Pill Badges */
-.environment {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  margin: 4px 6px 4px 0;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: var(--elastic-transition);
-}
-
-.card:hover .environment {
-  transform: scale(1.05) translateY(-1px);
-}
-
-.dev  { background: rgba(219, 234, 254, 0.6); color: #1d4ed8; border: 1px solid rgba(191, 219, 254, 0.7); }
-.qa   { background: rgba(254, 243, 199, 0.6); color: #b45309; border: 1px solid rgba(254, 243, 199, 0.7); }
-.uat  { background: rgba(224, 231, 255, 0.6); color: #4338ca; border: 1px solid rgba(199, 210, 254, 0.7); }
-.prod { background: rgba(209, 250, 229, 0.6); color: #047857; border: 1px solid rgba(167, 243, 208, 0.7); }
-
-body.dark .dev  { background: rgba(29, 78, 216, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
-body.dark .qa   { background: rgba(180, 83, 9, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
-body.dark .uat  { background: rgba(67, 56, 202, 0.2); color: #818cf8; border-color: rgba(99, 102, 241, 0.3); }
-body.dark .prod { background: rgba(4, 120, 87, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
 
 /* ==========================================================================
-   Interactive Buttons System & Micro-Animations
+   Modal backdrop blur enhancement
    ========================================================================== */
-.actions {
-  margin-top: auto;
-  padding-top: 24px;
-  display: flex;
-  gap: 12px;
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
 }
 
-button {
-  flex: 1;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--elastic-transition);
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* Fluid Linear Light Swipe Effect on Hover */
-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: none;
-}
-
-button:hover::before {
-  left: 100%;
-  transition: left 0.65s ease-in-out;
-}
-
-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.15);
-}
-
-button:active {
-  transform: translateY(-1px) scale(0.98);
-}
-
-/* Button Variants */
-.promote-btn {
-  background: var(--primary-color);
-  color: #ffffff;
-}
-
-.promote-btn:hover {
-  background: var(--primary-hover);
-  box-shadow: 0 10px 20px -4px rgba(221, 0, 49, 0.3);
-}
-
-.details-btn {
-  background: #f8fafc;
-  color: #475569;
-  border: 1px solid #cbd5e1;
-}
-
-body.dark .details-btn {
-  background: #1e293b;
-  color: #cbd5e1;
-  border-color: #475569;
-}
-
-.details-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-  border-color: #94a3b8;
-}
-
-body.dark .details-btn:hover {
-  background: #334155;
-  color: #ffffff;
-}
-
-.clear-btn {
-  background: #475569;
-  color: #ffffff;
-}
-
-.clear-btn:hover {
-  background: #334155;
-}
-
-/* Skeleton Loading Placeholder shimmer styling hooks */
-.shimmer-bg {
+/* ==========================================================================
+   Loading state (optional helper)
+   ========================================================================== */
+.loading-shimmer {
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
 }
 
-body.dark .shimmer-bg {
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.dark .loading-shimmer {
   background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-}
-
-/* ==========================================================================
-   Responsive Viewports Configuration
-   ========================================================================== */
-@media (max-width: 768px) {
-  #applications {
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 24px;
-  }
-}
-
-@media (max-width: 640px) {
-  body {
-    padding: 40px 16px;
-  }
-
-  .header {
-    margin-bottom: 40px;
-  }
-
-  .header h1 {
-    font-size: 36px;
-  }
-
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
-    gap: 12px;
-  }
-  
-  input, select, button {
-    width: 100%;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 8px;
-  }
+  background-size: 200% 100%;
 }
