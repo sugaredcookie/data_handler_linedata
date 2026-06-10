@@ -1,8 +1,3 @@
-Here is your beautiful, professional, and optimized `styles.css`.
-
-It has been custom-tuned to blend flawlessly with the new **deep slate dark background look** (set by default via the `html.dark` styling block) while offering premium, fluid component behavior, interactive micro-animations, and clean desktop/mobile layout configurations.
-
-```css
 /* ==========================================================================
    Base, Reset & Core Canvas Ecosystem
    ========================================================================== */
@@ -47,36 +42,37 @@ body.dark {
 /* ==========================================================================
    Premium Scrollbar Engineering
    ========================================================================== */
-.custom-scrollbar::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track,
+.sidebar-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 99px;
   border: 1px solid transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb,
+html.dark .sidebar-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
 }
 
-html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+html.dark .sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
-}
-
-/* Backwards compatibility hook for layout markup elements */
-.sidebar-scroll {
-  @extend .custom-scrollbar;
 }
 
 /* ==========================================================================
@@ -266,5 +262,3 @@ html.dark .shimmer-placeholder {
   opacity: 0;
   pointer-events: none;
 }
-
-```
