@@ -1,5 +1,5 @@
 // ---------- GLOBAL STATE ----------
-let applications = [];          // full dataset
+let applications = [];           // full dataset
 let uniqueClients = [];          // sorted list of client names
 let currentSelectedClient = "";  // currently active client
 let lastUpdated = new Date();
@@ -110,7 +110,7 @@ function getFilteredApplications() {
   return filtered;
 }
 
-// render cards (identical style, keep all buttons working)
+// render cards with Promote and Rollback buttons
 function renderApplications(data) {
   if (!container) return;
   container.innerHTML = "";
@@ -136,16 +136,19 @@ function renderApplications(data) {
           <span class="px-3 py-1 text-[11px] font-bold rounded-full ${envColor} shadow-sm">${escapeHtml(app.Environment)}</span>
         </div>
         <div class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <div class="flex items-center gap-2"><span class="font-medium">Version:</span><span class="font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">${escapeHtml(app.Version)}</span></div>
+          <div class="flex justify-between"><span class="font-medium">Version:</span><span class="font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">${escapeHtml(app.Version)}</span></div>
           <div><span class="font-medium">Client:</span> <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(app.Client)}</span></div>
           <div><span class="font-medium">Owner:</span> ${escapeHtml(app.Owner)}</div>
           <div><span class="font-medium">Release:</span> ${escapeHtml(app.ReleaseDate)}</div>
           <div><span class="font-medium">Status:</span> <span class="inline-flex items-center gap-1"><i class="fa-regular fa-clock text-xs"></i> ${escapeHtml(app.Status)}</span></div>
+          <div><span class="font-medium">Criticality:</span> <span class="px-2 py-0.5 rounded text-xs ${app.Criticality === 'HIGH' ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' : 'bg-slate-100 text-slate-700'}">${escapeHtml(app.Criticality)}</span></div>
+          <div><span class="font-medium">Last Promotion:</span> ${escapeHtml(app.LastPromotionDate)}</div>
         </div>
       </div>
-      <div class="mt-auto p-5 pt-2 flex gap-3 border-t border-slate-100 dark:border-slate-700/50">
-        <button data-client="${escapeHtml(app.Client)}" data-app="${escapeHtml(app.Application)}" class="details-trigger flex-1 py-2.5 text-sm font-medium border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition flex items-center justify-center gap-1"><i class="fa-regular fa-eye"></i> Details</button>
-        <button data-client="${escapeHtml(app.Client)}" data-app="${escapeHtml(app.Application)}" class="promote-trigger flex-1 py-2.5 text-sm font-semibold bg-primary hover:bg-red-700 text-white rounded-xl transition shadow-sm flex items-center justify-center gap-1"><i class="fa-regular fa-arrow-up-from-bracket"></i> Promote</button>
+      <div class="mt-auto p-5 pt-2 flex gap-2 border-t border-slate-100 dark:border-slate-700/50">
+        <button data-client="${escapeHtml(app.Client)}" data-app="${escapeHtml(app.Application)}" class="details-trigger flex-1 py-2.5 text-xs font-medium border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition flex items-center justify-center gap-1"><i class="fa-regular fa-eye"></i> Details</button>
+        <button data-client="${escapeHtml(app.Client)}" data-app="${escapeHtml(app.Application)}" class="promote-trigger flex-1 py-2.5 text-xs font-semibold bg-primary hover:bg-red-700 text-white rounded-xl transition shadow-sm flex items-center justify-center gap-1"><i class="fa-regular fa-arrow-up-from-bracket"></i> Promote</button>
+        <button data-client="${escapeHtml(app.Client)}" data-app="${escapeHtml(app.Application)}" class="rollback-trigger flex-1 py-2.5 text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white rounded-xl transition shadow-sm flex items-center justify-center gap-1"><i class="fa-solid fa-rotate-left"></i> Rollback</button>
       </div>
     `;
     container.appendChild(card);
@@ -166,6 +169,13 @@ function renderApplications(data) {
       promote(client, appName);
     });
   });
+  document.querySelectorAll('.rollback-trigger').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const client = btn.getAttribute('data-client');
+      const appName = btn.getAttribute('data-app');
+      rollback(client, appName);
+    });
+  });
 }
 
 function applyFiltersAndRender() {
@@ -174,7 +184,7 @@ function applyFiltersAndRender() {
   renderApplications(filteredData);
 }
 
-// ---------- MODAL & PROMOTE (fully compatible) ----------
+// ---------- MODAL with additional fields ----------
 window.viewDetails = function(client, applicationName) {
   const app = applications.find(a => a.Client === client && a.Application === applicationName);
   if (!app) return;
@@ -189,7 +199,9 @@ window.viewDetails = function(client, applicationName) {
       <div><p class="text-slate-400 text-xs uppercase">Environment</p><p class="font-semibold">${escapeHtml(app.Environment)}</p></div>
       <div><p class="text-slate-400 text-xs uppercase">Owner</p><p class="font-semibold">${escapeHtml(app.Owner)}</p></div>
       <div><p class="text-slate-400 text-xs uppercase">Criticality</p><p>${escapeHtml(app.Criticality)}</p></div>
-      <div><p class="text-slate-400 text-xs uppercase">Last Promotion</p><p>${escapeHtml(app.LastPromotionDate)}</p></div>
+      <div><p class="text-slate-400 text-xs uppercase">Last Promotion Date</p><p>${escapeHtml(app.LastPromotionDate)}</p></div>
+      <div><p class="text-slate-400 text-xs uppercase">Previous Version</p><p class="font-mono">${escapeHtml(app.PreviousVersion || 'N/A')}</p></div>
+      <div><p class="text-slate-400 text-xs uppercase">Previous Environment</p><p>${escapeHtml(app.PreviousEnvironment || 'N/A')}</p></div>
       <div class="col-span-2"><p class="text-slate-400 text-xs uppercase">Release Date</p><p>${escapeHtml(app.ReleaseDate)}</p></div>
     </div>
     <div class="mt-4 pt-3 border-t dark:border-slate-700"><span class="text-xs text-slate-400">Status</span><p class="font-medium text-base">${escapeHtml(app.Status)}</p></div>
@@ -204,6 +216,7 @@ window.closeModal = function() {
   modal.classList.remove("flex");
 };
 
+// ---------- PROMOTE function (unchanged, exact field labels) ----------
 window.promote = function(client, applicationName) {
   const app = applications.find(a => a.Client === client && a.Application === applicationName);
   if (!app) return;
@@ -216,15 +229,52 @@ window.promote = function(client, applicationName) {
     default: alert("Unknown Environment"); return;
   }
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
-  const body = encodeURIComponent(`### Client\n${app.Client}\n### Application Name\n${app.Application}\n### ### Current Environment\n${app.Environment}\n### ### Target Environment\n${target}\n### Version\n${app.Version}\n### ### Change Reason\nPromotion request from dashboard`);
+  const body = encodeURIComponent(`Client
+${app.Client}
+Application Name
+${app.Application}
+Current Environment
+${app.Environment}
+Target Environment
+${target}
+Version
+${app.Version}
+Change Reason
+Promotion request from dashboard`);
+  window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
+};
+
+// ---------- ROLLBACK function (exact field labels as required) ----------
+window.rollback = function(client, applicationName) {
+  const app = applications.find(a => a.Client === client && a.Application === applicationName);
+  if (!app) return;
+  
+  // Determine target environment for rollback (previous environment)
+  const targetEnv = app.PreviousEnvironment || app.Environment;
+  const previousVersion = app.PreviousVersion || app.Version;
+  
+  const title = encodeURIComponent(`[ROLLBACK] ${app.Application}`);
+  const body = encodeURIComponent(`Client
+${app.Client}
+Application Name
+${app.Application}
+Current Environment
+${app.Environment}
+Target Environment
+${targetEnv}
+Version
+${previousVersion}
+Change Reason
+Rollback requested from dashboard`);
+  
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
 };
 
 window.exportToCSV = function() {
   if (!applications.length) { alert("No data to export"); return; }
-  let csv = `"Client","Application","Version","Environment","Owner","ReleaseDate","Status","Criticality","LastPromotionDate"\n`;
+  let csv = `"Client","Application","Version","Environment","Owner","ReleaseDate","Status","Criticality","LastPromotionDate","PreviousVersion","PreviousEnvironment"\n`;
   applications.forEach(app => {
-    csv += `"${app.Client}","${app.Application}","${app.Version}","${app.Environment}","${app.Owner}","${app.ReleaseDate}","${app.Status}","${app.Criticality}","${app.LastPromotionDate}"\n`;
+    csv += `"${app.Client}","${app.Application}","${app.Version}","${app.Environment}","${app.Owner}","${app.ReleaseDate}","${app.Status}","${app.Criticality}","${app.LastPromotionDate}","${app.PreviousVersion || ''}","${app.PreviousEnvironment || ''}"\n`;
   });
   const blob = new Blob([csv], {type: "text/csv"});
   const url = URL.createObjectURL(blob);

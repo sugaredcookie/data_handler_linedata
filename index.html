@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -18,196 +18,143 @@
           colors: {
             primary: '#DD0031',
             secondary: '#0A2540',
-            'deep-slate-950': '#090d16',
-            'deep-slate-900': '#0f172a',
-            'deep-slate-800': '#1e293b',
           },
           fontFamily: {
             'sans': ['Inter', 'system-ui', 'sans-serif'],
           },
-          boxShadow: {
-            'premium': '0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-            'card-glow': '0 0 25px -5px rgba(221, 0, 49, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.3)',
-          },
           animation: {
             'fade-in': 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
             'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-            'pulse-soft': 'pulseSoft 3s infinite ease-in-out',
           },
           keyframes: {
-            fadeIn: { from: { opacity: '0', filter: 'blur(4px)' }, to: { opacity: '1', filter: 'blur(0)' } },
+            fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
             slideUp: { from: { transform: 'translateY(20px)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } },
-            pulseSoft: { '0%, 100%': { opacity: '0.8' }, '50%': { opacity: '0.4' } }
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-gradient-to-br from-deep-slate-950 via-slate-950 to-slate-900 text-slate-100 font-sans antialiased min-h-screen selection:bg-primary/30 selection:text-white">
+<body class="bg-slate-50 dark:bg-slate-950 font-sans antialiased">
 
-  <div class="fixed top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full filter blur-[120px] pointer-events-none animate-pulse-soft"></div>
-  <div class="fixed bottom-10 right-10 w-80 h-80 bg-blue-500/5 rounded-full filter blur-[100px] pointer-events-none animate-pulse-soft" style="animation-delay: 1.5s;"></div>
-
-  <div class="mobile-header-bar lg:hidden sticky top-0 z-30 bg-slate-900/80 border-b border-slate-800/80 px-5 py-3.5 flex items-center justify-between shadow-lg backdrop-blur-xl">
+  <!-- Mobile Header -->
+  <div class="mobile-header-bar lg:hidden sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-5 py-3 flex items-center justify-between shadow-sm">
     <div class="flex items-center gap-3">
-      <button id="mobileMenuBtn" class="text-primary text-xl p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 transition-all active:scale-95">
-        <i class="fa-solid fa-bars-staggered"></i>
+      <button id="mobileMenuBtn" class="text-primary text-xl p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+        <i class="fa-solid fa-bars"></i>
       </button>
       <div>
-        <h2 class="font-bold text-white text-sm tracking-wide uppercase text-[11px] text-slate-400">Account Context</h2>
-        <p id="mobileSelectedClient" class="text-sm text-primary font-bold tracking-tight">—</p>
+        <h2 class="font-bold text-slate-800 dark:text-white text-sm">Clients</h2>
+        <p id="mobileSelectedClient" class="text-xs text-primary font-medium">—</p>
       </div>
     </div>
-    <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-      <i class="fa-solid fa-circle-nodes text-primary text-xs animate-pulse"></i>
-      <span class="text-xs font-semibold tracking-wider uppercase text-slate-400">Hub-Active</span>
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-chart-line text-slate-400 text-sm"></i>
+      <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Release Hub</span>
     </div>
   </div>
 
-  <div id="mobileDrawerOverlay" class="fixed inset-0 bg-slate-950/80 z-40 backdrop-blur-md hidden transition-all duration-300 opacity-0"></div>
-  <div id="mobileDrawer" class="fixed top-0 left-0 h-full w-80 bg-slate-900 z-50 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
-    <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-      <div class="flex items-center gap-2.5">
-        <i class="fa-solid fa-rectangle-list text-primary text-lg"></i>
-        <span class="font-bold text-white tracking-tight">Enterprise Portfolio</span>
+  <!-- Mobile Drawer -->
+  <div id="mobileDrawerOverlay" class="mobile-drawer-overlay fixed inset-0 bg-black/40 z-40 backdrop-blur-sm hidden transition-all"></div>
+  <div id="mobileDrawer" class="mobile-drawer fixed top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 z-50 shadow-2xl border-r border-slate-200 dark:border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-building-columns text-primary text-lg"></i>
+        <span class="font-bold text-slate-800 dark:text-white">Client Portfolio</span>
       </div>
-      <button id="closeDrawerBtn" class="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all">
-        <i class="fa-solid fa-xmark text-sm"></i>
+      <button id="closeDrawerBtn" class="text-slate-500 hover:text-slate-800 dark:hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <div id="mobileClientList" class="flex-1 overflow-y-auto p-4 space-y-1.5 custom-scrollbar"></div>
+    <div id="mobileClientList" class="flex-1 overflow-y-auto p-3 space-y-1 sidebar-scroll"></div>
   </div>
 
+  <!-- Main Layout -->
   <div class="flex min-h-screen">
-    
-    <aside class="hidden lg:flex desktop-sidebar w-80 bg-slate-900/60 border-r border-slate-800/80 fixed left-0 top-0 h-full z-20 flex-col backdrop-blur-xl transition-all">
-      <div class="p-6 border-b border-slate-800 bg-slate-950/20">
-        <div class="flex items-center gap-3">
-          <div class="h-10 w-10 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center shadow-inner shadow-primary/20">
-            <i class="fa-solid fa-network-wired text-primary text-lg"></i>
+    <!-- Desktop Sidebar -->
+    <aside class="desktop-sidebar hidden lg:flex w-72 bg-white dark:bg-slate-900/90 border-r border-slate-200 dark:border-slate-800 shadow-sm fixed left-0 top-0 h-full z-20 flex-col backdrop-blur-sm">
+      <div class="p-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="h-9 w-9 bg-primary/10 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-briefcase text-primary text-xl"></i>
           </div>
           <div>
-            <h1 class="text-md font-bold tracking-tight text-white">Client Registry</h1>
-            <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Release Context System</p>
+            <h1 class="text-lg font-extrabold tracking-tight text-slate-800 dark:text-white">Clients</h1>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">Asset managers · Banks</p>
           </div>
         </div>
       </div>
-      
-      <div class="flex-1 overflow-y-auto py-5 px-4 space-y-1 custom-scrollbar" id="desktopClientList"></div>
-      
-      <div class="p-4 bg-slate-950/40 border-t border-slate-800/80 text-[11px] font-bold tracking-wider text-slate-400 uppercase flex items-center justify-between">
-        <span class="flex items-center gap-2"><i class="fa-solid fa-database text-slate-500"></i> Scope Registry</span>
-        <span id="totalClientsBadge" class="bg-slate-800 text-slate-200 px-2 py-0.5 rounded-md border border-slate-700">0 loaded</span>
+      <div class="flex-1 overflow-y-auto py-4 px-3 sidebar-scroll" id="desktopClientList"></div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 flex items-center gap-2">
+        <i class="fa-regular fa-building"></i> <span id="totalClientsBadge">0 clients</span>
       </div>
     </aside>
 
-    <main class="flex-1 lg:ml-80 transition-all duration-300 w-full overflow-x-hidden">
-      <div class="max-w-7xl mx-auto p-5 md:p-8 space-y-8 animate-fade-in">
-        
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-72 transition-all duration-300">
+      <div class="max-w-7xl mx-auto p-5 md:p-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-7 border-b border-slate-200/70 dark:border-slate-800/70 pb-5">
           <div>
-            <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              Application Manager
-            </h1>
-            <p class="text-slate-400 text-sm mt-1.5 flex items-center gap-2">
-              <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              Operational Pipeline Node <span class="text-slate-700">•</span> Real‑time Deployment Telemetry
-            </p>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-primary tracking-tight">Application Manager</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-2"><i class="fa-regular fa-circle-check text-emerald-500"></i> Client‑centric view · Real‑time promotion</p>
           </div>
-          
-          <div class="self-start md:self-auto">
-            <div class="text-xs font-mono bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl shadow-inner flex items-center gap-2.5">
-              <i class="fa-solid fa-clock-rotate-left text-primary animate-spin" style="animation-duration: 4s;"></i>
-              <span id="lastUpdated" class="text-slate-300 font-semibold tracking-wide">Connecting Node Pipeline...</span>
+          <div class="mt-3 md:mt-0 text-right">
+            <div class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full inline-flex items-center gap-2">
+              <i class="fa-solid fa-database text-primary/70 text-[10px]"></i>
+              <span id="lastUpdated" class="text-slate-600 dark:text-slate-300 font-medium">Syncing...</span>
             </div>
           </div>
         </div>
 
-        <div class="bg-slate-900/40 backdrop-blur-md rounded-2xl border border-slate-800/80 p-5 shadow-premium space-y-5 animate-slide-up">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            <div class="relative group">
-              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm group-focus-within:text-primary transition-colors"></i>
-              <input id="search" type="text" placeholder="Search operational keys..." 
-                     class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800/80 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm placeholder-slate-500 text-white transition-all shadow-inner">
+        <!-- Filter Bar -->
+        <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-800 p-5 mb-7 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input id="search" type="text" placeholder="Search application..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary text-sm">
             </div>
-
-            <div class="relative group">
-              <i class="fa-solid fa-server absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none group-focus-within:text-primary transition-colors"></i>
-              <select id="environmentFilter" class="w-full appearance-none pl-10 pr-10 py-2.5 bg-slate-950 border border-slate-800/80 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm text-slate-300 font-medium transition-all shadow-inner cursor-pointer">
-                <option value="ALL">All Cluster Environments</option>
-                <option value="DEV">DEV Node Cluster</option>
-                <option value="QA">QA Verification</option>
-                <option value="UAT">UAT Stage Sandbox</option>
-                <option value="PROD">PROD Core Live</option>
-              </select>
-              <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-[10px] pointer-events-none group-focus-within:rotate-180 transition-transform duration-300"></i>
-            </div>
-
-            <div class="relative group">
-              <i class="fa-solid fa-heart-pulse absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none group-focus-within:text-primary transition-colors"></i>
-              <select id="statusFilter" class="w-full appearance-none pl-10 pr-10 py-2.5 bg-slate-950 border border-slate-800/80 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm text-slate-300 font-medium transition-all shadow-inner cursor-pointer">
-                <option value="ALL">All Operational Status</option>
-                <option value="Ready For Promotion">State: Ready For Promotion</option>
-                <option value="Testing">State: Active Test Run</option>
-                <option value="Live">State: Production Live</option>
-                <option value="Development">State: Engineering Lab</option>
-              </select>
-              <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-[10px] pointer-events-none group-focus-within:rotate-180 transition-transform duration-300"></i>
-            </div>
-
-            <div class="relative group">
-              <i class="fa-solid fa-code-commit absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs group-focus-within:text-primary transition-colors"></i>
-              <input id="versionFilter" type="text" placeholder="Build Baseline SemVer (e.g. 2.1.0)" 
-                     class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800/80 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm placeholder-slate-500 text-white transition-all shadow-inner">
+            <select id="environmentFilter" class="w-full py-2.5 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
+              <option value="ALL">🌍 All Environments</option>
+              <option value="DEV">💻 DEV</option>
+              <option value="QA">🧪 QA</option>
+              <option value="UAT">📋 UAT</option>
+              <option value="PROD">🚀 PROD</option>
+            </select>
+            <select id="statusFilter" class="w-full py-2.5 px-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
+              <option value="ALL">📊 All Status</option>
+              <option value="Ready For Promotion">✅ Ready For Promotion</option>
+              <option value="Testing">🔍 Testing</option>
+              <option value="Live">⚡ Live</option>
+              <option value="Development">🛠️ Development</option>
+            </select>
+            <div class="relative">
+              <i class="fa-solid fa-code-branch absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input id="versionFilter" type="text" placeholder="Version (eg. 2.1.0)" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm">
             </div>
           </div>
-
-          <div class="border-t border-slate-800/60 my-2"></div>
-
-          <div class="flex flex-wrap items-center justify-end gap-3 pt-1">
-            <button onclick="window.clearFilters()" 
-                    class="px-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300 text-xs font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-2">
-              <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i> Reset Filters
-            </button>
-            <button onclick="window.exportToCSV()" 
-                    class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-2 shadow-md shadow-emerald-900/20 border border-emerald-500/30">
-              <i class="fa-solid fa-cloud-arrow-down"></i> Export Report (CSV)
-            </button>
+          <div class="flex justify-end gap-3 mt-5 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="window.clearFilters()" class="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm font-medium transition flex items-center gap-2"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button onclick="window.exportToCSV()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition flex items-center gap-2 shadow-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
           </div>
         </div>
 
-        <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12 transition-all duration-500"></div>
+        <!-- Applications Grid -->
+        <div id="applications" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10 animate-fade-in"></div>
       </div>
     </main>
   </div>
 
-  <div id="detailsModal" class="hidden fixed inset-0 bg-slate-950/80 flex items-center justify-center z-50 backdrop-blur-md transition-all duration-300 opacity-0">
-    <div class="bg-slate-900 rounded-2xl max-w-lg w-full mx-4 shadow-premium border border-slate-800 overflow-hidden transform scale-95 transition-transform duration-300 ease-out">
-      
-      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-        <div class="flex items-center gap-3">
-          <div class="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <i class="fa-solid fa-circle-nodes text-primary text-sm animate-pulse"></i>
-          </div>
-          <h2 id="modalAppName" class="text-lg font-bold tracking-tight text-white"></h2>
-        </div>
-        <button onclick="window.closeModal()" class="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
-          <i class="fa-solid fa-xmark text-sm"></i>
-        </button>
+  <!-- Details Modal -->
+  <div id="detailsModal" class="hidden fixed inset-0 bg-slate-950/70 flex items-center justify-center z-50 backdrop-blur-sm transition-all">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full mx-4 shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-info text-primary text-xl"></i><h2 id="modalAppName" class="text-xl font-bold text-slate-900 dark:text-white"></h2></div>
+        <button onclick="window.closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-2xl"></i></button>
       </div>
-      
-      <div id="modalContent" class="p-6 space-y-4 text-sm leading-relaxed text-slate-300 custom-scrollbar max-h-[60vh] overflow-y-auto"></div>
-      
-      <div class="px-6 py-4 bg-slate-950/40 border-t border-slate-800 flex justify-end">
-        <button onclick="window.closeModal()" 
-                class="px-4 py-2 bg-slate-800 border border-slate-700/60 hover:bg-slate-700 text-slate-200 text-xs font-bold uppercase tracking-wider rounded-xl transition-all">
-          Dismiss View
-        </button>
+      <div id="modalContent" class="p-6 space-y-3 text-sm text-slate-600 dark:text-slate-300"></div>
+      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+        <button onclick="window.closeModal()" class="px-5 py-2 bg-white dark:bg-slate-800 border rounded-xl text-sm font-medium">Close</button>
       </div>
     </div>
   </div>
