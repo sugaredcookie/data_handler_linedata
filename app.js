@@ -216,7 +216,7 @@ window.promote = function(client, applicationName) {
     default: alert("Unknown Environment"); return;
   }
   const title = encodeURIComponent(`[PROMOTION] ${app.Application} → ${target}`);
-  const body = encodeURIComponent(`### Client\n${app.Client}\n### Application\n${app.Application}\n### Current Env\n${app.Environment}\n### Target\n${target}\n### Version\n${app.Version}\n### Reason\nPromotion request from dashboard`);
+  const body = encodeURIComponent(`### Client\n${app.Client}\n### Application Name\n${app.Application}\n### ### Current Environment\n${app.Environment}\n### ### Target Environment\n${target}\n### Version\n${app.Version}\n### ### Change Reason\nPromotion request from dashboard`);
   window.open(`https://github.com/sugaredcookie/linedata_task_1/issues/new?title=${title}&body=${body}`, "_blank");
 };
 
