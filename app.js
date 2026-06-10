@@ -1,5 +1,5 @@
 // ---------- GLOBAL STATE ----------
-let applications = [];           // full dataset
+let applications = [];          // full dataset
 let uniqueClients = [];          // sorted list of client names
 let currentSelectedClient = "";  // currently active client
 let lastUpdated = new Date();
@@ -136,7 +136,7 @@ function renderApplications(data) {
           <span class="px-3 py-1 text-[11px] font-bold rounded-full ${envColor} shadow-sm">${escapeHtml(app.Environment)}</span>
         </div>
         <div class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <div class="flex justify-between"><span class="font-medium">Version:</span><span class="font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">${escapeHtml(app.Version)}</span></div>
+          <div class="flex items-center gap-2"><span class="font-medium">Version:</span><span class="font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">${escapeHtml(app.Version)}</span></div>
           <div><span class="font-medium">Client:</span> <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(app.Client)}</span></div>
           <div><span class="font-medium">Owner:</span> ${escapeHtml(app.Owner)}</div>
           <div><span class="font-medium">Release:</span> ${escapeHtml(app.ReleaseDate)}</div>
