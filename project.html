@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Project Deployment Matrix | Release Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { primary: '#DD0031' }, fontFamily: { 'sans': ['Inter'] } } }
+        }
+    </script>
+    <style>
+        .matrix-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        .matrix-table th, .matrix-table td { padding: 1rem; text-align: center; border-bottom: 1px solid #1e293b; }
+        .matrix-table th:first-child, .matrix-table td:first-child { text-align: left; }
+        .deployment-badge { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; font-size: 1.2rem; }
+        .env-summary-card { background: rgba(15, 23, 42, 0.5); border-radius: 12px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
+        .env-summary-card:hover { transform: translateY(-2px); background: rgba(221, 0, 49, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-950 font-sans antialiased">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="hidden lg:flex w-72 bg-slate-900/95 border-r border-slate-800 fixed left-0 top-0 h-full z-20 flex-col">
+            <div class="p-6 border-b border-slate-800">
+                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition">
+                    <div class="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-rocket text-primary text-xl"></i>
+                    </div>
+                    <div><h1 class="text-lg font-bold text-white">Release Manager</h1><p class="text-xs text-slate-400">Deployment Control</p></div>
+                </a>
+            </div>
+            <div class="flex-1 overflow-y-auto py-6 px-4">
+                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3 px-3">Clients</div>
+                <div id="sidebarClients" class="space-y-1"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-72">
+            <div class="max-w-7xl mx-auto p-6 md:p-8">
+                <!-- Header -->
+                <div class="mb-6">
+                    <a href="javascript:history.back()" class="text-primary hover:text-primary/80 text-sm inline-flex items-center gap-1"><i class="fa-solid fa-arrow-left"></i> Back to Projects</a>
+                    <h1 id="projectName" class="text-3xl font-bold text-white mt-2">Loading...</h1>
+                    <p id="clientName" class="text-slate-400 mt-1"></p>
+                </div>
+
+                <!-- Environment Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8" id="envSummary"></div>
+
+                <!-- Promotion Action -->
+                <div id="promotionAction" class="mb-8"></div>
+
+                <!-- Deployment Matrix -->
+                <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
+                    <div class="p-5 border-b border-slate-800">
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-table-list text-primary"></i> Release Deployment Matrix</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="matrix-table" id="releaseMatrix">
+                            <thead class="bg-slate-800/50">
+                                <tr class="border-b border-slate-700">
+                                    <th class="text-slate-300 font-semibold text-left">Release ID</th>
+                                    <th class="text-slate-300 font-semibold">QA</th>
+                                    <th class="text-slate-300 font-semibold">UAT</th>
+                                    <th class="text-slate-300 font-semibold">PROD</th>
+                                    <th class="text-slate-300 font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrixBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/project.js"></script>
+</body>
+</html>
