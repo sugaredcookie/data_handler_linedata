@@ -1,211 +1,446 @@
+/* ==========================================================================
+   Base & Reset System
+   ========================================================================== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #DD0031;
+  --primary-hover: #b91c1c;
+  --primary-glow: rgba(221, 0, 49, 0.15);
+  
+  /* Deep Slate Color System */
+  --slate-950: #090d16;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-400: #94a3b8;
+  
+  /* Missing Structural Variables Restored */
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(15, 23, 42, 0.08);
+  
+  /* Physics Easing Tracks */
+  --spring-easing: cubic-bezier(0.25, 1.1, 0.5, 1.15);
+  --smooth-easing: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: #020617;
-    color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom Scrollbar - Dark Theme */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+/* Deep Slate Dark Mode Override System */
+html.dark body {
+  background: radial-gradient(circle at top right, var(--slate-950) 0%, #060910 50%, #020408 100%);
+  color: #f8fafc;
 }
 
-::-webkit-scrollbar-track {
-    background: #1e293b;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #475569;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
-}
-
-/* Sidebar Scroll */
+/* ==========================================================================
+   Premium Scrollbar Engineering (Shared Comma Selectors)
+   ========================================================================== */
+::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar,
 .sidebar-scroll::-webkit-scrollbar {
-    width: 4px;
+  width: 6px;
+  height: 6px;
 }
 
-/* Client Card Styles */
-.client-card, .project-card {
-    background: #0f172a;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    border: 1px solid #1e293b;
+::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track,
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.client-card:hover, .project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.4);
-    border-color: rgba(221, 0, 49, 0.3);
+::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15);
+  border-radius: 99px;
+  border: 1px solid transparent;
 }
 
-.client-card h3, .project-card h3 {
-    color: #ffffff;
+::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.3);
 }
 
-/* Stats Cards */
-.stats-card {
-    transition: all 0.3s ease;
+html.dark ::-webkit-scrollbar-thumb,
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb,
+html.dark .sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.stats-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+html.dark ::-webkit-scrollbar-thumb:hover,
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+html.dark .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Matrix Table Styles */
-.matrix-table th,
-.matrix-table td {
-    border-bottom-color: #1e293b;
-    color: #e2e8f0;
+/* ==========================================================================
+   Navigation Links & Interactive UI Nodes
+   ========================================================================== */
+.client-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: var(--slate-700);
+  font-weight: 500;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+  transition: var(--smooth-easing) 0.25s;
+  cursor: pointer;
+  background: transparent;
 }
 
-.matrix-table tbody tr {
-    transition: background-color 0.2s ease;
+html.dark .client-nav-link {
+  color: var(--slate-400);
 }
 
-.matrix-table tbody tr:hover {
-    background-color: rgba(221, 0, 49, 0.05);
+.client-nav-link:hover {
+  color: #1e293b;
+  background: rgba(15, 23, 42, 0.04);
+  transform: translateX(4px);
 }
 
-/* Client Active State */
+html.dark .client-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Shared Active Sidebar State */
 .client-active {
-    background: linear-gradient(95deg, rgba(221, 0, 49, 0.15) 0%, transparent 100%);
-    border-left: 3px solid #DD0031;
-    color: #DD0031 !important;
-    font-weight: 600;
+  background: linear-gradient(90deg, rgba(221, 0, 49, 0.06) 0%, transparent 100%) !important;
+  border-left: 3px solid var(--primary) !important;
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+
+html.dark .client-active {
+  background: linear-gradient(90deg, rgba(221, 0, 49, 0.15) 0%, transparent 100%) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 12px rgba(221, 0, 49, 0.3);
 }
 
 .client-active i {
-    color: #DD0031 !important;
+  color: var(--primary) !important;
 }
 
-/* Buttons */
-.btn-primary {
-    background: #DD0031;
-    color: white;
-    transition: all 0.2s ease;
+/* ==========================================================================
+   Cards Blueprint Matrix
+   ========================================================================== */
+.client-card, 
+.project-card, 
+.app-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform 0.4s var(--spring-easing), 
+              box-shadow 0.4s var(--smooth-easing), 
+              border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  will-change: transform, box-shadow;
 }
 
-.btn-primary:hover {
-    background: #b91c1c;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px -5px rgba(221, 0, 49, 0.4);
+html.dark .client-card, 
+html.dark .project-card, 
+html.dark .app-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px solid var(--border-dark);
 }
 
-/* Toast Animation */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+.client-card:hover, 
+.project-card:hover, 
+.app-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(221, 0, 49, 0.25) !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1), 0 0 20px -5px rgba(221, 0, 49, 0.02);
 }
 
-.toast {
-    animation: slideInRight 0.3s ease-out;
-    background: #0f172a;
-    border: 1px solid #1e293b;
-    color: #e2e8f0;
+html.dark .client-card:hover, 
+html.dark .project-card:hover, 
+html.dark .app-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 30px -5px rgba(221, 0, 49, 0.05);
 }
 
-/* Mobile Responsive */
-@media (max-width: 1024px) {
-    .desktop-sidebar {
-        display: none !important;
-    }
-    
-    .mobile-header {
-        display: flex !important;
-    }
+/* Subtle glowing linear line for active card elements */
+.client-card::before, 
+.project-card::before, 
+.app-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(221, 0, 49, 0.015) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
-/* Loading Spinner */
-@keyframes spin {
-    to { transform: rotate(360deg); }
+.client-card:hover::before, 
+.project-card:hover::before, 
+.app-card:hover::before {
+  opacity: 1;
 }
 
-.spinner {
-    animation: spin 0.8s linear infinite;
+/* Stats Summary Block Cards */
+.stats-card {
+  transition: transform 0.4s var(--spring-easing), box-shadow 0.4s var(--smooth-easing);
+  will-change: transform;
 }
 
-/* Glassmorphism Effects */
-.glass {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
 }
 
-/* Environment Summary Cards */
-.env-summary-card h3 {
-    color: #ffffff;
+/* Environment Variant Cards */
+.env-summary-card {
+  background: rgba(241, 245, 249, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.4s var(--spring-easing), background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.env-summary-card p {
-    color: #94a3b8;
+html.dark .env-summary-card {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Modal Styles */
-.modal-content {
-    background: #0f172a;
-    border: 1px solid #1e293b;
+.env-summary-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  background: rgba(221, 0, 49, 0.03);
+  border-color: rgba(221, 0, 49, 0.2);
 }
 
-/* Input Fields */
+/* ==========================================================================
+   Matrix Data Sheet Tables
+   ========================================================================== */
+.matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.matrix-table th {
+  padding: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate-700);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+html.dark .matrix-table th {
+  color: var(--slate-400);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.matrix-table td {
+  padding: 16px;
+  color: #334155;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  transition: color 0.2s ease;
+}
+
+html.dark .matrix-table td {
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.matrix-table tbody tr {
+  transition: background-color 0.25s var(--smooth-easing);
+}
+
+.matrix-table tbody tr:hover {
+  background-color: rgba(221, 0, 49, 0.02);
+}
+
+html.dark .matrix-table tbody tr:hover {
+  background-color: rgba(221, 0, 49, 0.03);
+}
+
+.matrix-table tbody tr:hover td {
+  color: #000000;
+}
+
+html.dark .matrix-table tbody tr:hover td {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Interactive Input Elements & Anti-Flicker Protections
+   ========================================================================== */
 input, select, textarea {
-    background: #0f172a;
-    border-color: #1e293b;
-    color: #f8fafc;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  border-radius: 12px;
+  color: #0f172a;
+  padding: 12px 16px;
+  font-size: 14px;
+  transition: all 0.25s var(--smooth-easing);
+}
+
+html.dark input, html.dark select, html.dark textarea {
+  background: #060911;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
 }
 
 input:focus, select:focus, textarea:focus {
-    border-color: #DD0031;
-    outline: none;
-    lighting-color: rgba(221, 0, 49, 0.3);
+  outline: none !important;
+  outline-style: none;
+  accent-color: var(--primary);
+  border-color: rgba(221, 0, 49, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(221, 0, 49, 0.12), inset 0 2px 4px rgba(0, 0, 0, 0.05) !important;
 }
 
 input::placeholder {
-    color: #64748b;
+  color: #94a3b8;
 }
 
-/* Link Styles */
-a {
-    color: #94a3b8;
-    transition: color 0.2s ease;
+html.dark input::placeholder {
+  color: #526173;
 }
 
-a:hover {
-    color: #DD0031;
+/* Prevent dynamic autocomplete user-agent flicker layers inside browsers */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #0f172a !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Table Text Colors */
-.matrix-table td {
-    color: #cbd5e1;
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f8fafc !important;
+  -webkit-box-shadow: 0 0 0px 1000px #060911 inset !important;
 }
 
-.matrix-table .font-mono {
-    color: #e2e8f0;
+/* ==========================================================================
+   Buttons System & Micro-Transitions
+   ========================================================================== */
+.btn-premium-action {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: transform 0.4s var(--spring-easing), box-shadow 0.4s var(--smooth-easing);
 }
 
-/* Version Badges */
+.btn-premium-action::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: none;
+}
+
+.btn-premium-action:hover::after {
+  left: 100%;
+  transition: left 0.75s ease-in-out;
+}
+
+.btn-premium-action:hover {
+  transform: translateY(-2px);
+}
+
+.btn-premium-action:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   System Dialog Modals & Backdrops
+   ========================================================================== */
+#detailsModal {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  transition: opacity 0.35s var(--smooth-easing);
+  opacity: 0;
+}
+
+#detailsModal > div {
+  transition: transform 0.35s var(--spring-easing);
+}
+
+#detailsModal.opacity-100 {
+  opacity: 1 !important;
+}
+
+/* ==========================================================================
+   System Runtime Animation Keyframes
+   ========================================================================== */
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.toast {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+}
+
+html.dark .toast {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+.spinner {
+  animation: spin 0.75s linear infinite;
+}
+
+/* Version Pill Tags */
 .version-badge {
-    background: #1e293b;
-    color: #94a3b8;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-family: monospace;
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--slate-700);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 700;
+  border: 1px solid rgba(15, 23, 42, 0.03);
+}
+
+html.dark .version-badge {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }

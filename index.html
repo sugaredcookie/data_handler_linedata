@@ -1,137 +1,183 @@
+<html>
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Deployment Manager</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { primary: '#DD0031', secondary: '#0A2540' },
-                    fontFamily: { 'sans': ['Inter', 'system-ui', 'sans-serif'] },
-                    animation: { 'fade-in': 'fadeIn 0.5s ease-out', 'slide-up': 'slideUp 0.6s ease-out' },
-                    keyframes: {
-                        fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
-                        slideUp: { from: { transform: 'translateY(20px)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } }
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Linedata | Deployment Manager</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <script>
+    // Critical Path Runtime: Initialize instant localStorage canvas sync to eliminate styling flashes
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#DD0031',
+            secondary: '#0A2540',
+            'deep-slate-950': '#090d16',
+            'deep-slate-900': '#0f172a',
+            'deep-slate-800': '#1e293b',
+          },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'premium-glass': '0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+            'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          keyframes: {
+            fadeIn: { from: { opacity: '0', filter: 'blur(4px)' }, to: { opacity: '1', filter: 'blur(0)' } },
+            slideUp: { from: { transform: 'translateY(20px)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } }
+          }
         }
-    </script>
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-950 font-sans antialiased">
-    <!-- Mobile Header -->
-    <div class="mobile-header lg:hidden fixed top-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-5 py-3 flex items-center justify-between shadow-lg">
-        <button id="mobileMenuBtn" class="text-primary text-xl p-2 rounded-xl hover:bg-slate-800 transition">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <div class="flex items-center gap-2">
-            <i class="fa-solid fa-rocket text-primary"></i>
-            <span class="font-bold text-white">Release Manager</span>
-        </div>
-        <div class="w-10"></div>
+<body class="bg-slate-50 dark:bg-gradient-to-br dark:from-deep-slate-950 dark:via-slate-950 dark:to-slate-900 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen pb-12 transition-colors duration-300">
+
+  <div class="hidden dark:block fixed top-0 right-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full filter blur-[140px] pointer-events-none animate-pulse" style="animation-duration: 10s;"></div>
+
+  <div class="mobile-header lg:hidden sticky top-0 z-30 bg-white/90 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800/80 px-5 py-3.5 flex items-center justify-between shadow-md backdrop-blur-xl transition-colors duration-300">
+    <div class="flex items-center gap-3">
+      <button id="mobileMenuBtn" class="text-primary text-xl p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95" aria-label="Open Navigation">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-rocket text-primary text-md"></i>
+        <span class="font-extrabold tracking-tight text-slate-900 dark:text-white text-sm">Release Manager</span>
+      </div>
     </div>
-
-    <!-- Mobile Drawer -->
-    <div id="mobileDrawerOverlay" class="fixed inset-0 bg-black/70 z-40 hidden"></div>
-    <div id="mobileDrawer" class="fixed top-0 left-0 h-full w-80 bg-slate-900 z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-briefcase text-primary text-xl"></i>
-                <span class="font-bold text-white">Navigation</span>
-            </div>
-            <button id="closeDrawerBtn" class="text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="p-4">
-            <div class="mb-6">
-                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3">Clients</div>
-                <div id="mobileClientList" class="space-y-2"></div>
-            </div>
-        </div>
+    
+    <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
+      <i class="fa-solid fa-circle text-emerald-500 text-[8px] animate-pulse"></i>
+      <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Live</span>
     </div>
+  </div>
 
-    <!-- Desktop Layout -->
-    <div class="flex min-h-screen">
-        <!-- Desktop Sidebar -->
-        <aside class="desktop-sidebar hidden lg:flex w-72 bg-slate-900/95 border-r border-slate-800 fixed left-0 top-0 h-full z-20 flex-col shadow-xl">
-            <div class="p-6 border-b border-slate-800">
-                <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-rocket text-primary text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-white">Release Manager</h1>
-                        <p class="text-xs text-slate-400">Deployment Control</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 overflow-y-auto py-6 px-4">
-                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3 px-3">Clients</div>
-                <div id="desktopClientList" class="space-y-1"></div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 lg:ml-72">
-            <div class="max-w-7xl mx-auto p-6 md:p-8">
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
-                    <div class="stats-card bg-gradient-to-br from-primary/10 to-slate-900 rounded-2xl p-5 border border-primary/20 bg-slate-900/50">
-                        <div class="flex items-center justify-between">
-                            <div><p class="text-slate-400 text-sm">Total Clients</p><p id="totalClients" class="text-3xl font-bold text-white mt-1">0</p></div>
-                            <i class="fa-solid fa-building text-4xl text-primary/30"></i>
-                        </div>
-                    </div>
-                    <div class="stats-card bg-gradient-to-br from-emerald-500/10 to-slate-900 rounded-2xl p-5 border border-emerald-500/20 bg-slate-900/50">
-                        <div class="flex items-center justify-between">
-                            <div><p class="text-slate-400 text-sm">Total Projects</p><p id="totalProjects" class="text-3xl font-bold text-white mt-1">0</p></div>
-                            <i class="fa-solid fa-diagram-project text-4xl text-emerald-500/30"></i>
-                        </div>
-                    </div>
-                    <div class="stats-card bg-gradient-to-br from-blue-500/10 to-slate-900 rounded-2xl p-5 border border-blue-500/20 bg-slate-900/50">
-                        <div class="flex items-center justify-between">
-                            <div><p class="text-slate-400 text-sm">Total Releases</p><p id="totalReleases" class="text-3xl font-bold text-white mt-1">0</p></div>
-                            <i class="fa-solid fa-tag text-4xl text-blue-500/30"></i>
-                        </div>
-                    </div>
-                    <div class="stats-card bg-gradient-to-br from-purple-500/10 to-slate-900 rounded-2xl p-5 border border-purple-500/20 bg-slate-900/50">
-                        <div class="flex items-center justify-between">
-                            <div><p class="text-slate-400 text-sm">Latest Deployment</p><p id="latestDeployment" class="text-sm font-semibold text-white mt-1">—</p></div>
-                            <i class="fa-solid fa-calendar-week text-4xl text-purple-500/30"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="mb-8">
-                    <div class="relative">
-                        <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="globalSearch" placeholder="Search by Client, Project, Release ID, or Version..." class="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary text-white placeholder-slate-500">
-                    </div>
-                </div>
-
-                <!-- Clients Grid -->
-                <div>
-                    <h2 class="text-2xl font-bold text-white mb-5 flex items-center gap-2">
-                        <i class="fa-solid fa-building text-primary"></i> Client Portfolio
-                    </h2>
-                    <div id="clientsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-                </div>
-            </div>
-        </main>
+  <div id="mobileDrawerOverlay" class="fixed inset-0 bg-slate-950/60 z-40 backdrop-blur-sm hidden transition-all duration-300 opacity-0"></div>
+  <div id="mobileDrawer" class="fixed top-0 left-0 h-full w-80 bg-white dark:bg-slate-900 z-50 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+    <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/20">
+      <div class="flex items-center gap-2.5">
+        <i class="fa-solid fa-rectangle-list text-primary text-md"></i>
+        <span class="font-bold text-slate-900 dark:text-white tracking-tight">System Navigation</span>
+      </div>
+      <button id="closeDrawerBtn" class="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all" aria-label="Close Navigation">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
     </div>
+    <div class="p-4 flex-1 overflow-y-auto custom-scrollbar">
+      <div class="mb-6">
+        <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-3">Client Portfolio</div>
+        <div id="mobileClientList" class="space-y-1.5"></div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Toast Container -->
-    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
+  <div class="flex min-h-screen">
+    
+    <aside class="desktop-sidebar hidden lg:flex w-80 bg-white dark:bg-slate-900/40 border-r border-slate-200 dark:border-slate-800/80 fixed left-0 top-0 h-full z-20 flex-col backdrop-blur-xl transition-colors duration-300">
+      <div class="p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-950/20">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center shadow-inner shadow-primary/10">
+            <i class="fa-solid fa-layer-group text-primary text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-md font-bold tracking-tight text-slate-900 dark:text-white">Release Manager</h1>
+            <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Deployment Control</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
+        <div class="text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold mb-3 px-3">Client Nodes</div>
+        <div id="desktopClientList" class="space-y-1.5"></div>
+      </div>
+    </aside>
 
-    <script src="js/api.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/app.js"></script>
+    <main class="flex-1 lg:ml-80 transition-all duration-300 w-full overflow-x-hidden">
+      <div class="max-w-7xl mx-auto p-5 md:p-8 space-y-6 animate-fade-in">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-slide-up">
+          
+          <div class="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm dark:shadow-premium-glass flex items-center justify-between group hover:border-primary/30 transition-all">
+            <div class="space-y-1">
+              <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Clients</p>
+              <p id="totalClients" class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">0</p>
+            </div>
+            <div class="h-12 w-12 bg-primary/5 rounded-xl flex items-center justify-center text-primary/40 group-hover:text-primary transition-colors duration-300">
+              <i class="fa-solid fa-building text-2xl"></i>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm dark:shadow-premium-glass flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+            <div class="space-y-1">
+              <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Projects</p>
+              <p id="totalProjects" class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">0</p>
+            </div>
+            <div class="h-12 w-12 bg-emerald-500/5 rounded-xl flex items-center justify-center text-emerald-500/40 group-hover:text-emerald-400 transition-colors duration-300">
+              <i class="fa-solid fa-diagram-project text-2xl"></i>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm dark:shadow-premium-glass flex items-center justify-between group hover:border-blue-500/30 transition-all">
+            <div class="space-y-1">
+              <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Releases</p>
+              <p id="totalReleases" class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">0</p>
+            </div>
+            <div class="h-12 w-12 bg-blue-500/5 rounded-xl flex items-center justify-center text-blue-500/40 group-hover:text-blue-400 transition-colors duration-300">
+              <i class="fa-solid fa-tags text-2xl"></i>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm dark:shadow-premium-glass flex items-center justify-between group hover:border-purple-500/30 transition-all">
+            <div class="space-y-1 flex-1 min-w-0">
+              <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Latest Deployment</p>
+              <p id="latestDeployment" class="text-sm font-bold text-slate-900 dark:text-slate-200 mt-1 truncate">—</p>
+            </div>
+            <div class="h-12 w-12 bg-purple-500/5 rounded-xl flex items-center justify-center text-purple-500/40 group-hover:text-purple-400 transition-colors duration-300 flex-shrink-0 ml-2">
+              <i class="fa-solid fa-calendar-check text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group animate-slide-up" style="animation-delay: 0.1s;">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base group-focus-within:text-primary transition-colors">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input type="text" id="globalSearch" 
+                 placeholder="Filter environment index by Client, Project identifier, Release ID tag, or baseline version..." 
+                 class="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 shadow-sm transition-all">
+        </div>
+
+        <div class="space-y-4 animate-slide-up" style="animation-delay: 0.2s;">
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+            <i class="fa-solid fa-grip text-primary text-sm"></i> Portfolio Worksheets
+          </h2>
+          <div id="clientsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm w-full pointer-events-none"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

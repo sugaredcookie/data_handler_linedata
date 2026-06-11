@@ -1,64 +1,151 @@
+<html>
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Client Projects | Release Manager</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: { colors: { primary: '#DD0031' }, fontFamily: { 'sans': ['Inter'] } } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Client Projects | Release Manager</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <script>
+    // Critical Path Runtime: Initialize instant localStorage canvas sync to eliminate styling flashes
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#DD0031',
+            secondary: '#0A2540',
+            'deep-slate-950': '#090d16',
+            'deep-slate-900': '#0f172a',
+            'deep-slate-800': '#1e293b',
+          },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'premium-glass': '0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+            'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          keyframes: {
+            fadeIn: { from: { opacity: '0', filter: 'blur(4px)' }, to: { opacity: '1', filter: 'blur(0)' } },
+            slideUp: { from: { transform: 'translateY(20px)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } }
+          }
         }
-    </script>
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-950 font-sans antialiased">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="hidden lg:flex w-72 bg-slate-900/95 border-r border-slate-800 fixed left-0 top-0 h-full z-20 flex-col">
-            <div class="p-6 border-b border-slate-800">
-                <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition">
-                    <div class="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-rocket text-primary text-xl"></i>
-                    </div>
-                    <div><h1 class="text-lg font-bold text-white">Release Manager</h1><p class="text-xs text-slate-400">Deployment Control</p></div>
-                </a>
-            </div>
-            <div class="flex-1 overflow-y-auto py-6 px-4">
-                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3 px-3">Clients</div>
-                <div id="sidebarClients" class="space-y-1"></div>
-            </div>
-        </aside>
+<body class="bg-slate-50 dark:bg-gradient-to-br dark:from-deep-slate-950 dark:via-slate-950 dark:to-slate-900 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen pb-12 transition-colors duration-300">
 
-        <!-- Main Content -->
-        <main class="flex-1 lg:ml-72">
-            <div class="max-w-7xl mx-auto p-6 md:p-8">
-                <!-- Header -->
-                <div class="mb-8">
-                    <a href="index.html" class="text-primary hover:text-primary/80 text-sm mb-3 inline-flex items-center gap-1"><i class="fa-solid fa-arrow-left"></i> Back to Clients</a>
-                    <h1 id="clientName" class="text-3xl md:text-4xl font-bold text-white mt-2">Loading...</h1>
-                    <p class="text-slate-400 mt-1">Project Portfolio</p>
-                </div>
+  <div class="hidden dark:block fixed top-0 right-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full filter blur-[140px] pointer-events-none animate-pulse" style="animation-duration: 10s;"></div>
 
-                <!-- Search -->
-                <div class="relative mb-6">
-                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="projectSearch" placeholder="Search projects..." class="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500">
-                </div>
-
-                <!-- Projects Grid -->
-                <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-            </div>
-        </main>
+  <div class="mobile-header lg:hidden sticky top-0 z-30 bg-white/90 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800/80 px-5 py-3.5 flex items-center justify-between shadow-md backdrop-blur-xl transition-colors duration-300">
+    <div class="flex items-center gap-3">
+      <button id="mobileMenuBtn" class="text-primary text-xl p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95" aria-label="Open Navigation">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-rocket text-primary text-md"></i>
+        <span class="font-extrabold tracking-tight text-slate-900 dark:text-white text-sm">Release Manager</span>
+      </div>
     </div>
+    
+    <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
+      <i class="fa-solid fa-circle text-emerald-500 text-[8px] animate-pulse"></i>
+      <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Live</span>
+    </div>
+  </div>
 
-    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
+  <div id="mobileDrawerOverlay" class="fixed inset-0 bg-slate-950/60 z-40 backdrop-blur-sm hidden transition-all duration-300 opacity-0"></div>
+  <div id="mobileDrawer" class="fixed top-0 left-0 h-full w-80 bg-white dark:bg-slate-900 z-50 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+    <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/20">
+      <div class="flex items-center gap-2.5">
+        <i class="fa-solid fa-rectangle-list text-primary text-md"></i>
+        <span class="font-bold text-slate-900 dark:text-white tracking-tight">System Navigation</span>
+      </div>
+      <button id="closeDrawerBtn" class="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all" aria-label="Close Navigation">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+    <div class="p-4 flex-1 overflow-y-auto custom-scrollbar">
+      <div class="mb-6">
+        <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-3">Client Portfolio</div>
+        <div id="mobileClientList" class="space-y-1.5"></div>
+      </div>
+    </div>
+  </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/client.js"></script>
+  <div class="flex min-h-screen">
+    
+    <aside class="desktop-sidebar hidden lg:flex w-80 bg-white dark:bg-slate-900/40 border-r border-slate-200 dark:border-slate-800/80 fixed left-0 top-0 h-full z-20 flex-col backdrop-blur-xl transition-colors duration-300">
+      <div class="p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-950/20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="h-10 w-10 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center shadow-inner shadow-primary/10 transition-transform group-hover:scale-105">
+            <i class="fa-solid fa-rocket text-primary text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-md font-bold tracking-tight text-slate-900 dark:text-white">Release Manager</h1>
+            <p class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Deployment Control</p>
+          </div>
+        </a>
+      </div>
+      <div class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
+        <div class="text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold mb-3 px-3">Client Nodes</div>
+        <div id="sidebarClients" class="space-y-1.5"></div>
+      </div>
+    </aside>
+
+    <main class="flex-1 lg:ml-80 transition-all duration-300 w-full overflow-x-hidden">
+      <div class="max-w-7xl mx-auto p-5 md:p-8 space-y-6 animate-fade-in">
+        
+        <div class="flex flex-col gap-1 border-b border-slate-200 dark:border-slate-800 pb-5">
+          <a href="index.html" class="group text-primary hover:text-red-500 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 transition-colors">
+            <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> Back to Fleet Overview
+          </a>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+            <h1 id="clientName" class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+              Loading Registry Node...
+            </h1>
+          </div>
+          <p class="text-slate-400 text-sm mt-0.5 font-medium">Isolated Project Portfolio Matrix</p>
+        </div>
+
+        <div class="relative group animate-slide-up" style="animation-delay: 0.1s;">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base group-focus-within:text-primary transition-colors">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input type="text" id="projectSearch" 
+                 placeholder="Search localized project modules, operational tags, or parameters..." 
+                 class="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 shadow-sm transition-all">
+        </div>
+
+        <div class="space-y-4 animate-slide-up" style="animation-delay: 0.2s;">
+          <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm w-full pointer-events-none"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/client.js"></script>
 </body>
 </html>
